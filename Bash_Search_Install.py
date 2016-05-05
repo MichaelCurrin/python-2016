@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
 
 """
@@ -55,15 +55,18 @@ def ConsoleSearch(fileExtension, folderName):
     fileArray = []
     for name in array: # loop through names looking for those containing fileExtension and add to array
         if fileExtension in name.lower():
-            fileArray.append(name)
-    
+            if folderName: # add path to filenames
+                fileArray.append('%s/%s' % (folderName, name)) # e.g. 'Inputs/authentication.csv'
+            else:
+                fileArray.append(name) # e.g. 'authentication.csv'
+                
     return fileArray  
 
 
 def ConsoleInstall(libraries):
     """Loop through a list of library names which have been provided as input.
     Attempt to install using Console function.
-    Show OK if installing successfully or previous, othterwise show a FAIL message.
+    Show OK if installed successfully or previously, othterwise show a FAIL message.
 
     Arguments
         libraries
@@ -71,14 +74,18 @@ def ConsoleInstall(libraries):
             e.g. ['oauth2', 'Flask']
     """
     
+    installResultList = []
     for lib in libraries:
         installCommand = 'pip install %s' % lib
         try:
             Console(installCommand)
-            print installCommand + ' ... OK'
+            installResultList.append('%s ... OK' % installCommand)            
+            #print installCommand + ' ... OK'
         except:
-            print installCommand + ' ... FAIL'
-
+            installResultList.append('%s ... OK' % installCommand)            
+            #print installCommand + ' ... FAIL'
+            
+    return installResultList
 
 if __name__ == '__main__': 
     # run if  Bash_Search_Install.py file is executed directly. ignore if it is imported into another Py file
@@ -107,4 +114,4 @@ if __name__ == '__main__':
     """ test the ConsoleInstallModules function """
     testList = ['oauth2', 'Flask']
     print ConsoleInstall(testList)
-    print '---'       
+    print '---'         
