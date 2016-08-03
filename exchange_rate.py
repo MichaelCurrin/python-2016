@@ -1,3 +1,4 @@
+#!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
 """
 Created on Fri July 22 2016
@@ -7,13 +8,16 @@ Author
     Twitter.com: @michaelcurrin
     Github.com: MichaelCurrin
 
-Get Rand/Dollar exchange rate for a date or date range, from an API service.
-Then use in another script such as inserting into a database.
-Store to DB for current day or for each day in requested range, if not already
-in DB.
+Get Rand/Dollar exchange rate for a date or date range.
+Using Fixer's API at http://api.fixer.io.
+No account or API key is needed.
 
-Using JSON from API at fixer.io
-Fixer values are sourced orignally from http://www.ecb.europa.eu/
+Documentation is available for the API at http://fixer.io.
+Data values are sourced orignally from http://www.ecb.europa.eu/
+
+I recommend using importing these methods, applying your currency and dates
+then storing the date-value pairs in a database.
+Let me know if this script comes in handy for anyone.
 """
 import datetime
 import urllib2 # access the web
@@ -131,7 +135,8 @@ if __name__ == '__main__':
     
     print 'Testing exchange_rate.py and getting API data...'
     print
-    print "Most recent rate"
+    print '***** TEST 1 *****'
+    print "Most recent day available"
     print "(This may be yesterday's value if today is not in the API)"
     ZAR_data = GetRateBaseSymbol(base, symbol)
     for x in ZAR_data: 
@@ -139,6 +144,7 @@ if __name__ == '__main__':
     
     print
     
+    print '***** TEST 2 *****'
     print 'Date Range for %s to %s ' % (symbol, base)
     print 
     
@@ -151,23 +157,25 @@ if __name__ == '__main__':
     # create list of data pairs
     dailyRates = GetRatesForRange(base, symbol, start, end)
     
-    # print data. 
+    # print data
     for x in dailyRates:
         print x[0], x[1] # ignore 'exchange' in [x2] for testing
 
      
-    #Sample output
-     
+    # Sample output shown below
     """
     Testing exchange_rate.py and getting API data...
-    
-    Most recent rate
+
+    ***** TEST 1 *****
+    Most recent day available
     (This may be yesterday's value if today is not in the API)
     2016-08-02
     13.97
     1 USD = 13.97 ZAR
     
+    ***** TEST 2 *****
     Date Range for ZAR to USD 
+    
     2016-07-01 14.574
     2016-07-04 14.492
     2016-07-05 14.751
