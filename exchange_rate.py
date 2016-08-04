@@ -1,7 +1,8 @@
 #!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
 """
-Created on Fri July 22 2016
+Created on July 22 2016
+Updated on August 3 2016
 
 Author
     Michael Currin
