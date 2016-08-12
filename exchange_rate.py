@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on July 22 2016
-Updated on August 3 2016
+Updated on 12 Aug 2016
 
 Author
     Michael Currin
@@ -63,6 +63,19 @@ def GetDateRange(startDate, endDate):
     
     return dateRange
 
+def GetLastNDays(n):
+    """
+    Produce a list of dates for n days ago to today
+    Args
+        n: positive integer. e.g. 0, 1, 7, 28.
+    Returns:
+        startDate: datetime.date object. Start of period
+        endDate: datetime.date object. End of period (today)
+    """
+    endDate = datetime.date.today()
+    startDate = endDate - datetime.timedelta(days = (n-1))
+    return startDate, endDate
+
 
 #==============================================================================
 # Currency methods
@@ -99,7 +112,7 @@ def GetRateBaseSymbol(base, symbol, date= 'latest'):
     returnedDate, rate = data['date'], data['rates'][symbol]
     
     # format exchange rate in easy to read string
-    exchange = '1 %s = %s %s' % (base, round(rate,2), symbol)
+    exchange = '1 %s = %s %s' % (base, rate, symbol)
     
     return returnedDate, rate, exchange
     
