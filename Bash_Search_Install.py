@@ -1,19 +1,25 @@
 #!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
-
 """
-Created on Thu Apr 28 10:03:59 2016
+Created on 28 April 2016
+Updated 21 August 2016
 
 @author: michaelcurrin
 
-This script defines functions used to pass commands to the Mac or Unix
- terminal, as comand line or bash code. 
-The capabilities are explained within each function.
+I learnt to use the Mac / Unix command line a bit, through CourseAcademy. 
+I've used info from online articles and StackOverflow questions I found, 
+around the use of Popen.
+
+This script defines functions used to pass commands to the Mac or Unix 
+terminal, as comand line or bash code. 
+The capabilities are explained within each function, such as to install libraries 
+or search for files in the working directory. 
+This and more can be done through Python "os" library too, but this is my
+own version.
 
 To see how to run this script in other scripts, 
     place test_Bash.py and Bash_Search_Install.py in the same directory. 
-    Run testConsole script.
-
+    Run testConsole function in that script.
 """
 
 import subprocess
@@ -26,15 +32,15 @@ def Console(command):
     The online Python documentation on the subprocess library includes notes 
     and cautions on use of shell=True versus shell=False.
 
-    Arguments:
-        command
+    Args
+        command:
             string of commands to excecute, separated by a semi-colon
             e.g. 'ls'
             e.g. 'pwd'
             e.g. 'ls; pwd; cd ..; pwd' 
-	Returns:
-		output
-		response from the terminal
+    Returns
+        output: 
+            response from the terminal
     """
     
     process = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
@@ -53,14 +59,14 @@ def ConsoleSearch(searchTerm = '', folderName =''):
     leave input blank to show all results.
 
     
-    Arguments: 
-        searchTerm
+    Args 
+        searchTerm:
             The string to search for in the file name and/or extension
             e.g. ''
             e.g. '.csv' 
             e.g. '2016'
             e.g. ' 2016.xls'
-        folderName
+        folderName:
             The exact name of the subfolder directory to search within. 
             e.g. 'Inputs/' 
             
@@ -77,10 +83,10 @@ def ConsoleSearch(searchTerm = '', folderName =''):
             e.g. "'July 2016'/"
             
     Returns
-    	fileArray
-    		list
-    		response from the terminal
-    		names of file or foldernames which match the search parameters
+        fileArray:
+            list
+            response from the terminal
+            names of file or foldernames which match the search parameters
     """
 
     # check if a subfolder is defined and navigate to it.
@@ -100,14 +106,14 @@ def ConsoleSearch(searchTerm = '', folderName =''):
         # add to array
         for name in array: 
             if searchTerm in name.lower():
-	            if folderName: # add path to filenames
-	                fileArray.append('%s/%s' % (folderName, name))
+                if folderName: # add path to filenames
+                    fileArray.append('%s/%s' % (folderName, name))
                      # e.g. 'Inputs/authentication.csv'
-	            else:
-	                fileArray.append(name) 
+                else:
+                    fileArray.append(name) 
                      # e.g. 'authentication.csv'
     else:
-		fileArray = array
+        fileArray = array
                 
     return fileArray  
 
@@ -119,13 +125,13 @@ def ConsoleInstall(libraries):
     to the Console function defined in this script
     Show the outcome as OK (installed or already exists) or FAIL.
 
-    Arguments:
-        libraries
+    Args
+        libraries:
             list 
             library names to be installed
             e.g. ['oauth2', 'Flask']
-    Returns:
-        	installResultList
+    Returns
+        installResultList:
              list
              response from the terminal as libraries attempted to be installed, 
              along with the outcome for each.
