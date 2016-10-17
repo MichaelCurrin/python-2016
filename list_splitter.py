@@ -25,7 +25,7 @@ def SplitListByGrouping(list, x):
     Args
         list: list of items in any format or mixed. 
               e.g. ['ABC', 23590.34, 23]
-              If a singel string is inputte, then the string is split
+              If a single string is inputted, then the string is split
                   e.g. 'a235235' -> ['a23', '523', '5']
         x:  maximum length to be allowed for any single list. 
             e.g. 100
