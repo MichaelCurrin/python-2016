@@ -9,7 +9,10 @@ Download a CSV report from Adwords API for month to date.
 The script requires 
 	live Adwords ad data, 
 	a mananager account above the ad client account
-	and a .yml file in the home directory containing authentication data
+	and a .yaml file in the home directory containing authentication data
+    google ads installed 
+        bash command
+            $ sudo pip install googleads
 	a config.py file present in the working directory with the query data and 
 		report name
 	a directory called 'data' within the current working directory
@@ -110,7 +113,7 @@ def main():
         CSV to overwrite existing file
         a new CSV file in the log subfolder
 
-	Read data from Adwords API using credentials YAML (.yml) file in user
+	Read data from Adwords API using credentials in YAML file in user
 	home directory (otherwise, you're forced to open browser dialog to 
 	create the file).
 	Store reports as 2 CSVs.
