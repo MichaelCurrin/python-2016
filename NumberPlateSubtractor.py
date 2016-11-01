@@ -8,20 +8,26 @@ Contact: www.twitter.com/MichaelCurrin; https://github.com/MichaelCurrin
 
 ### Background ###
 
-In my area (Cape Town, South Africa), car number plates are typically in the format 'CA 123-456'. In traffic, I sometimes add up the digits on the left and subtact the digits on the right, to my maths. The letters at the start ignored.
-I observed a number plate which had a net value of zero when following my arithmetic rule. I wondered how many ways there are to get a zero using 6 digits. And what this probability based on all subtraction outcomes you can get based on 1,000,000 combinations of digits. 
-I suspected that zero would be common as its in the middle of a range of net values.  Since '000-000','001-001','100-001','111-111' and '999-999' are all examples of combinations which yield zero.
+In my area (Cape Town, South Africa), car number plates are typically in the format 'CA 123-456'. In traffic, I sometimes add 
+up the digits on the left and subtact the digits on the right, to my maths. The letters at the start ignored.
+I observed a number plate which had a net value of zero when following my arithmetic rule. I wondered how many ways there are 
+to get a zero using 6 digits. And what this probability based on all subtraction outcomes you can get based on 1,000,000 
+combinations of digits. 
+I suspected that zero would be common as its in the middle of a range of net values.  Since '000-000','001-001','100-001',
+'111-111' and '999-999' are all examples of combinations which yield zero.
 While a value like 27 is rare as there is only one way to achieve it ('999-000').
 But 26 is more common ('998-000', '989-000', '899-000','999-001', etc.)
 
 ### Summary ###
 
-The script calculates the probability of observing a number plate which has a value of 0 when subtracting the sum of the last 3 digits from the first 3.
+The script calculates the probability of observing a number plate which has a value of 0 when subtracting the sum of the 
+last 3 digits from the first 3.
 
 Apply for any number of digits but still only 2 terms for subtraction.
 (This could later expanded to more terms if adding or multipling all terms e.g. 123*987*456 e.g. 123+234+345)
 
-Any input is allowed in a list in the form 'XXX-XXX' where X is an integer and there are any number of X values on bother sides of the dash (minus sign), but at least one X on each side.
+Any input is allowed in a list in the form 'XXX-XXX' where X is an integer and there are any number of X values on bother 
+sides of the dash (minus sign), but at least one X on each side.
 
 
 ### Sample output ###
@@ -52,7 +58,8 @@ save result
 
 
 calculate for all possible combinations of X and Y digits
-rather than separate, use total digits e.g. 3 digits and 3 digits is 6 digits and this must be the new input but just split down the iddle
+rather than separate, use total digits e.g. 3 digits and 3 digits is 6 digits and this must be the new input but just split down 
+the iddle
 creat distinct list of outcomes with count of occurences for each, as a dictionary
 
 lookup result in list
@@ -118,7 +125,9 @@ def getPossibleValues(inputString):
     
     formattedRangeStrings = [] 
     for integer in fullRangeInt:
-        splitPosition = len(str(integer)) - lengths[1] # e.g. 5 (from 123456) - 3 (from 456), equals split at character 2 for 5 digits (2...3) and only split at 3rd character for 6 digits (3...3)
+        splitPosition = len(str(integer)) - lengths[1] 
+        # e.g. 5 (from 123456) - 3 (from 456), equals split at character 2 
+        #for 5 digits (2...3) and only split at 3rd character for 6 digits (3...3)
         string = '%s-%s' % (str(integer)[0:splitPosition], str(integer)[splitPosition:]) # e.g. 999-999
         formattedRangeStrings.append(string)
     
@@ -128,7 +137,8 @@ def getPossibleValues(inputString):
 
 def CalculateProbability (testValue):
 
-    possibleValues = getPossibleValues(testValue) # e.g. '999-991', '999-992', '999-993', '999-994', '999-995', '999-996', '999-997', '999-998', '999-999']
+    possibleValues = getPossibleValues(testValue) 
+    # e.g. '999-991', '999-992', '999-993', '999-994', '999-995', '999-996', '999-997', '999-998', '999-999']
     
     #print possibleValues
     
@@ -150,7 +160,9 @@ def CalculateProbability (testValue):
     
     #for keys in uniquePossibleValues:    print keys, uniquePossibleValues[keys] # TEST
     
-    NumWaysResultCanOccur = uniquePossibleValues[subTractTerms(testValue)] # lookup the number of occurences of input subtraction result from results
+    NumWaysResultCanOccur = uniquePossibleValues[subTractTerms(testValue)] 
+    # lookup the number of occurences of input subtraction result from results
+    
     CountAllOutcomes = len(uniquePossibleValues.keys()) # count number of keys (unique outcomes)
     TotalAllOutcomes = sum(uniquePossibleValues.values()) # count of number outcomes including duplicates
     Probability = percentage(NumWaysResultCanOccur,TotalAllOutcomes)
@@ -179,5 +191,6 @@ for items in plates:
     CalculateProbability(items) 
 
 # future development
-#generatedPlates = getPossibleValues('000-000') # generate all plates for 6 digits. this can be used as input for the probablity calculation and then to find the distribution, but returns a neater method than printing 4 lines each time. 
+#generatedPlates = getPossibleValues('000-000') # generate all plates for 6 digits. this can be used as input for the probablity 
+#calculation and then to find the distribution, but returns a neater method than printing 4 lines each time. 
 
