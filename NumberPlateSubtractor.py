@@ -3,7 +3,7 @@
 """
 Created on Sat May  7 22:12:36 2016
 
-@author: michaelcurrin
+Author: michaelcurrin
 Contact: www.twitter.com/MichaelCurrin; https://github.com/MichaelCurrin
 
 ### Background ###
