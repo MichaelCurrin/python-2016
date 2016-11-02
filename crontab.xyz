@@ -33,3 +33,14 @@ PATH=/Users/michaelcurrin/anaconda/bin:/Users/michaelcurrin/anaconda/bin:/usr/bi
 # Comedy festival data pull
 # everyday at 12pm
 0       12      *       *       *       source activate dashboard && cd "Google Drive"/Cron/Twitter && python Twitter_comedy.py
+
+# Notes
+# Note that each row executes independently, starting from the home directory regardless of where the row about it ended.
+# in order to run two independent commands sequentially use a semi-colon to separate
+# e.g. cd Documents; ls
+# make sure that the 1st command had finished when the 2nd starts, by separating with && as above.
+
+# Also note that omitting the && and executing two commands in one is formally fine in the console
+# e.g. $ cd "Google Drive"/Cron/Scheduled_GA_Reporting/python execute_tech_report.py
+# unfortunately this leads to problems in cronjob. Particulaly if execute_tech_report.py imports a config file in its working directory
+# but crontab still thinks the working directory is username rather than username/"Google Drive"/Cron/Scheduled_GA_Reporting
