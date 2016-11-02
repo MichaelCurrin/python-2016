@@ -1,1 +1,35 @@
+### SETUP
 
+SHELL=/bin/bash
+PATH=/Users/michaelcurrin/anaconda/bin:/Users/michaelcurrin/anaconda/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin
+
+# FORMATTING NOTE
+
+# Crontab uses 5 stars which MUST be separated by a tab and not spaces
+# *   *   *   *   *
+# these can be replaced with numeric values as below
+
+# * minute (0-59)
+# * hours (0-23)
+# * day (1-31)
+# * month (1-12)
+# * day of week (0 Sunday to 6 Saturday
+
+
+# SCRIPTS TO RUN
+
+# Tech team report
+# Monday and Thursday at 9:30am
+30      9       *       *       1,4     cd "Google Drive"/Cron/Scheduled_GA_Reporting && python execute_tech_report.py
+
+# Media team report
+# Monday to Friday at 9:30am
+30      9       *       *       1-5     cd "Google Drive"/Cron/Scheduled_GA_Reporting && python execute_media_report.py
+
+# Social media check
+# Monday and Thursday at 9:30am
+30      9       *       *       1,4     cd "Google Drive"/Cron/SocialBasicTest && python social_handle_check.py
+
+# Comedy festival data pull
+# everyday at 12pm
+0       12      *       *       *       source activate dashboard && cd "Google Drive"/Cron/Twitter && python Twitter_comedy.py
