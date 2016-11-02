@@ -1,0 +1,17 @@
+The file guides you on steps to schedule a bash or python script to run autatically on your machine.
+
+
+Open Console on Mac or Linux system
+
+$ env EDITOR=nano crontab -e
+
+paste the code from crontab.xyz file.
+Customise as necessary to run to file or files at the correct frequency and with the corret paths.
+
+ctrl + O to save
+
+Enter to save as /tmp/crontab/xyz
+
+ctrl + X to exit
+
+You see a confirmation message that is was installed, or you see an error message.
