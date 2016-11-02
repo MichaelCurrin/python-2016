@@ -3,10 +3,26 @@ The file guides you on steps to schedule a bash or python script to run autatica
 
 Open Console on Mac or Linux system
 
+Ensure that your SHELL and PATH variables are setup correctly. Otherwise 
+might find that your scripts run manually in the console but give 
+import errors because it thinks a library is not installed or that 
+you are in the wrong working directory.
+
+Therefore, To make crontab.xyz run correctly, enter the following in the console.
+$ echo $SHELL
+# example output: SHELL=/bin/bash
+$ echo $PATH
+# example output: PATH=/Users/.../anaconda/...
+
+Make a note of the two results.
+
+Open crontab using nano text editor.
+
 $ env EDITOR=nano crontab -e
 
-paste the code from crontab.xyz file.
-Customise as necessary to run to file or files at the correct frequency and with the corret paths.
+Enter your cronjob code in the window.
+You can base it on my crontab.xyz file.
+Customise as necessary to run to file or files at the correct frequency and with the correct paths.
 
 ctrl + O to save
 
