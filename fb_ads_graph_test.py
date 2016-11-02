@@ -72,7 +72,7 @@ urls = [dailystats,
 def Main():
 
     # FB token is generated in business manager, with ads access
-    FBtoken = 'EAAIG7v8rtQUBANDmrBhvRf9InXxwwKH0mZBcZAnW4d038cZAlZA2osfdP4mUdGeeftZBcURwQ17VsEiZBTqWg33mTeWDNKiPYdQqpyhEomEJWA3VCZBMrnZBMnHMZCw58P7ZBXj4KBVZACBsYviuiFDo40Kto8XN918he4ZD'
+    FBtoken = 'XXXXXXXXXXXXXXXXXXX'
      
     # Print URLs with token
     if True:
