@@ -10,7 +10,7 @@ Customise as necessary to run to file or files at the correct frequency and with
 
 ctrl + O to save
 
-Enter to save as /tmp/crontab/xyz
+Enter or Y to save as /tmp/crontab/xyz in the default directory.
 
 ctrl + X to exit
 
