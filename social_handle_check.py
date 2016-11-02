@@ -24,23 +24,27 @@ import oauth2 as oauth #used query Twitter API
 import json # used to convert API JSON results to usable format
 import datetime #used to display times and durations
 
-
-import readCSV
-FBInputCompetitorHandles, TWInputCompetitorHandles = readCSV.ReadCompetitors()
-#print FBInputCompetitorHandles, TWInputCompetitorHandles
+# here are a few handles to get you started. replace them as necessary
+FBInputCompetitorHandles = {'SetA': ['TEDEducation', 'ConstructiveEnlightenment','curiositydotcom'],
+                           'SetB': ['WorldOfPuns', 'dyesciencebro'],
+                            'DeliberateError':['abcxyz123xxx']
+                          } 
+TWInputCompetitorHandles = {'Health':['@CiplaRSA','@Novartis','@Pfizer_news'],
+                            'Rice':['@SpekkoSA','@Tastic_Rice']
+                           }
 
 StartTime = datetime.datetime.now() # record start of program
 print 'Started at %s' % str(StartTime)
 
 # ---------EMAIL-------------------------------
 
-addressList = ['michael@lumen.works','mark@lumen.works'] #list of addresses to be sent to
-#addressList = addressList[0]
+addressList = ['user1@gmail.com','user2@yahoo.com'] # enter users you wish to send to
+
 
 def sendMail(inputText,inputSubject,inputToAddress) : # method to send mail with defined text, subject and to address
-    fromaddr = "analytics@c6consulting.com"
-    toaddr = inputToAddress # e.g. "michael@c6consulting.com"
-    mypassword = 'lumen123'
+    fromaddr = "myaccount@gmail.com" # replace with your gmail address
+    toaddr = inputToAddress
+    mypassword = 'password'
 
     msg = MIMEMultipart()
     msg['From'] = fromaddr
@@ -63,23 +67,24 @@ def sendMail(inputText,inputSubject,inputToAddress) : # method to send mail with
 # ---------FACEBOOK SETUP-------------------------------
 
 
-ManualExtendedToken = 'EAAIG7v8rtQUBAIYwrujTWMfi6o1LVqu23UFGNUNgQoSmky3myhNHE4B8rysmlTZCyb4dGFRcZBhG5uoyDf9SWY9Iq02kYqESG6eoARpnJgZClqKTZBwTUZC1DAKFOFcm4fZCUfqwhEp6OaBA1TmoZAH'
-# expires 25 November
+ManualExtendedToken = 'XXXXXXXXXXXXXXXXXXXXXXXXXX'
 
 # manually extended token
 # Instructions
 # 1 Go to https://developers.facebook.com/tools/accesstoken/#_=_
-# 2 Generate USER token for Lumen Analytics (app)
-# 3 "Debug"
-# 4 "Extend"
+# 2 Generate USER token for your app
+# 3 click "Debug"
+# 4 click "Extend"
 # 5 Copy and paste above.
-# 6 Updated expiry date above
+
+# the expiry date should be for 2 months time.
+
 
 
 #-------FACEBOOK METHODS------------------
 
 def TestActiveToken(pageName, FBtoken):
-    """check with token is valid"""
+    """check whether token is valid"""
     
     graphURL = 'https://graph.facebook.com/v2.5/%s?access_token=%s' % (pageName,FBtoken)
 
@@ -154,11 +159,11 @@ def FacebookCheck():
 #-------TWITTER SETUP------------------
 
 
-# authorise Twitter API using registered API (@michaelcurrin)
-CONSUMER_KEY = "8Bd8W9smhObONVdglSEQvjugF"
-CONSUMER_SECRET = "L7ICk98WYHrhvmsr0Suib3lL8hKI1Ve9egdphzJPOz97hhxOVY"
-ACCESS_KEY = "23818174-Eo5rxj0EWAWtA2OvROgJqSUJ6EZFclBC3uA77Ae7w"
-ACCESS_SECRET = "zPNFkHLFiYiHyAMwKXMWJiOMonaL4fYLOfFBVOwLNORTE"
+# authorise Twitter API using registered app
+CONSUMER_KEY = "XXXXX"
+CONSUMER_SECRET = "XXXXX"
+ACCESS_KEY = "XXXXX"
+ACCESS_SECRET = "XXXXXXX"
 consumer = oauth.Consumer(key=CONSUMER_KEY, secret=CONSUMER_SECRET)
 access_token = oauth.Token(key=ACCESS_KEY, secret=ACCESS_SECRET)
 client = oauth.Client(consumer, access_token)
@@ -214,7 +219,7 @@ def TwitterCheck():
     # continue to test handles if token is valid
     if TokenStatus == 'OK':
         for clientName in TWInputCompetitorHandles:   # look through client names
-            str1= clientName  #Amstel
+            str1= clientName 
             TwitterMessageList.append(str1)
             #print str1
 
