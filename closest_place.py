@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Sun Nov  6 21:42:22 2016
+@author: michaelcurrin
 
 I created this script based on a question I found on Github here, where I was 
 able to provide a solution
@@ -10,10 +11,7 @@ http://stackoverflow.com/questions/40452887/navigating-through-a-dictionary-in-p
 The purpose is to find the location which is nearest to the given location 
 but also has the features (e.g. gas) which are required.
 The script then prints the details of the closest place including the distance to it.
-
-@author: michaelcurrin
 """
-
 import math
 
 def findDistance(A, B):
@@ -55,10 +53,9 @@ def GetClosestPlace(places, loc, feature):
             # for this version, so that it will not be chosen
             distance = 1000 
         
-            # add calculated distance to existing dictionary for location
+         # add calculated distance to existing dictionary for location
         places[index]['distance'] = distance    
-
-            
+        
     # find shortest distance and return details for that place
     
     allDistances = [x['distance'] for x in places]
@@ -67,8 +64,8 @@ def GetClosestPlace(places, loc, feature):
     for place in places:
         if place['distance'] == shortestDistance:
             return place
-      
 
+        
 placesList = [dict(name='foo',location=(0,3), features=['gas', 'food']),
               dict(name='bar',location=(4,6), features=['food', 'hospital']),
               dict(name='abc',location=(0,9), features=['gas','barber']),
