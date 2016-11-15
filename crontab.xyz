@@ -1,7 +1,26 @@
-### SETUP
+#   Crontab file for Home Directory for Michael Currrin
 
+# SETUP
 SHELL=/bin/bash
 PATH=/Users/michaelcurrin/anaconda/bin:/Users/michaelcurrin/anaconda/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin
+MAILTO=XXXX@XXXXX.com
+
+#-----------------------------------------------------------------------------
+#Min    Hour    Day     Month   Weekday Command
+#-----------------------------------------------------------------------------
+# disk usage
+#0      *       *       *       1-5     du -h --max-depth=1 /
+# print environment
+0       12      *       *       1-5     source activate dashboard && conda info --env
+# Tech
+30      9       *       *       1,4     source activate dashboard && cd "Google Drive"/Cron/Scheduled_GA_Reporting && python execute_tech_report.py
+# Media
+30      9       *       *       1-5     source activate dashboard && cd "Google Drive"/Cron/Scheduled_GA_Reporting && python execute_media_report.py
+# Social
+30      9       *       *       1,4     source activate dashboard && cd "Google Drive"/Cron/SocialBasicTest && python social_handle_check.py
+# Trending data Twitter API pull
+0       9,12,15,18      *       *       *       source activate dashboard && cd "Google Drive"/Cron/Trending && python Twitter_trending.py
+
 
 # FORMATTING NOTE
 
@@ -13,34 +32,9 @@ PATH=/Users/michaelcurrin/anaconda/bin:/Users/michaelcurrin/anaconda/bin:/usr/bi
 # * hours (0-23)
 # * day (1-31)
 # * month (1-12)
-# * day of week (0 Sunday to 6 Saturday
+# * day of week (0 Sunday to 6 Saturday)
 
-
-# SCRIPTS TO RUN
-
-# Tech team report
-# Monday and Thursday at 9:30am
-30      9       *       *       1,4     cd "Google Drive"/Cron/Scheduled_GA_Reporting && python execute_tech_report.py
-
-# Media team report
-# Monday to Friday at 9:30am
-30      9       *       *       1-5     cd "Google Drive"/Cron/Scheduled_GA_Reporting && python execute_media_report.py
-
-# Social media check
-# Monday and Thursday at 9:30am
-30      9       *       *       1,4     cd "Google Drive"/Cron/SocialBasicTest && python social_handle_check.py
-
-# Comedy festival data pull
-# everyday at 12pm
-0       12      *       *       *       source activate dashboard && cd "Google Drive"/Cron/Twitter && python Twitter_comedy.py
-
-# Notes
-# Note that each row executes independently, starting from the home directory regardless of where the row about it ended.
-# in order to run two independent commands sequentially use a semi-colon to separate
-# e.g. cd Documents; ls
-# make sure that the 1st command had finished when the 2nd starts, by separating with && as above.
-
-# Also note that omitting the && and executing two commands in one is formally fine in the console
-# e.g. $ cd "Google Drive"/Cron/Scheduled_GA_Reporting/python execute_tech_report.py
-# unfortunately this leads to problems in cronjob. Particulaly if execute_tech_report.py imports a config file in its working directory
-# but crontab still thinks the working directory is username rather than username/"Google Drive"/Cron/Scheduled_GA_Reporting
+# ENVIRONMENT NOTE
+# change environment to one with all libaries
+# this must be done for each row
+# source activate dashboard &&
