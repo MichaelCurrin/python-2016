@@ -6,8 +6,16 @@ Author: Michael Currin
 This script is designed to test installations of downloaded modules.
 This can be double-clicked if named test_modules.command
 However, this means that the environment can not be set.
-Therefore it is better to run this from the console after choosing the environment, as
-$ python test_modules.py
+Therefore it is better to run this from the console after choosing the environment.
+Make this executable:
+	$ chmod +x test_modules.py
+Execute with python
+	$ test_modules.py
+
+
+Note that "python" can be omitted from 
+	$ python test_modules.py
+ since the python shebang has been included in this script.
 """
 print "starting imports..."
 print
@@ -29,7 +37,7 @@ print
 print '#### Facebook Ads ####'
 try:
 	import facebookads
-	print 'OKAY - facebookads'
+	print 'OKAY'
 except ImportError as e:
 	print 'ERROR - %s' % e
 
@@ -62,7 +70,7 @@ print
 print '#### Google Ads ####'
 try:
 	import googleads
-	print 'OKAY - googleads'
+	print 'OKAY'
 except ImportError as e:
 	print 'ERROR - %s' % e
 
