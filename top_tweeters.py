@@ -6,7 +6,7 @@ Created on Fri Nov 25 23:12:33 2016
 @author: michaelcurrin
 
 Get the handles of top users on twitter
-by scraping data from top 100 lists from socialblade.com, across 4 catgories
+by scraping data from four top 100 lists from socialblade.com
 Create a list of unique handles across the lists. 
 Sort and print it.
 """
@@ -71,7 +71,6 @@ Top Twitter handles
 3) 2of__
 4) 2thank
 5) 5SOS
-
 ...
 374) xtina
 375) yokoono
