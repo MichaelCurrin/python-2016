@@ -5,10 +5,10 @@ Created on Fri Nov 25 23:12:33 2016
 
 @author: michaelcurrin
 
-Get the handles of top users on twitter from socialblade.com,
-for 4 categories.
-Create a sorted list of unique handles across the lists.
-Print it.
+Get the handles of top users on twitter
+by scraping data from top 100 lists from socialblade.com, across 4 catgories
+Create a list of unique handles across the lists. 
+Sort and print it.
 """
 import requests
 
@@ -47,7 +47,6 @@ if False:
         for i, h in enumerate(item['handles']):
             print '%i) %s' % (i+1, h)  
         print
-
             
 # Create unique list
 unique_handles = []
@@ -55,14 +54,14 @@ unique_handles = []
 for item in pages:
     for handle in item['handles']:
         if handle not in unique_handles:
-            unique_handles.append(handle)
-            
+            unique_handles.append(handle)  
 
 # Sort and print unique list
 sorted_handles = sorted(unique_handles)
 print 'Top Twitter handles'
 for i, h in enumerate(sorted_handles):
     print '%i) %s' % (i+1, h)
+
 
 # Sample result
 """
