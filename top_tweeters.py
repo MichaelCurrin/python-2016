@@ -39,14 +39,6 @@ for i in range(len(pages)):
             handle = slash_split
             pages[i]['handles'].append(handle)
 
-# Create unique list
-unique_handles = []
-
-for item in pages:
-    for handle in item['handles']:
-        if handle not in unique_handles:
-            unique_handles.append(handle)
-            
 # set to True to print contents of each list
 if False: 
     for item in pages:
@@ -56,7 +48,17 @@ if False:
             print '%i) %s' % (i+1, h)  
         print
 
-# Sort and print
+            
+# Create unique list
+unique_handles = []
+
+for item in pages:
+    for handle in item['handles']:
+        if handle not in unique_handles:
+            unique_handles.append(handle)
+            
+
+# Sort and print unique list
 sorted_handles = sorted(unique_handles)
 print 'Top Twitter handles'
 for i, h in enumerate(sorted_handles):
