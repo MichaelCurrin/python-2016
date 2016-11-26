@@ -10,7 +10,9 @@ by scraping data from four top 100 lists from socialblade.com
 Create a list of unique handles across the lists. 
 Sort and print it.
 """
-import requests
+import requests # for opening URLs
+from bs4 import BeautifulSoup # for processing HTML tags
+import re # for regex matches
 
 # Setup categories and URLs
 
@@ -22,21 +24,28 @@ pages = [dict(name= 'Top Followers', url= base_url % 'followers'),
          ]
 
 # Query each URL and store HTML RSULT
+
+search_string = '/twitter/user/'
 for i in range(len(pages)):
     pages[i]['handles'] = [] # create empty list in dict
     
     url = pages[i]['url']
-    html = requests.get(url).content
-
-    # split by line break, quotation marks and then forwardslash, to 
-    # extract 100 user handles from a page
+    data = requests.get(url).text
     
-    row_split = html.split('\n')
-    for row in row_split:
-        if 'twitter/user' in row:
-            quote_split = row.split('"')[-2]
-            slash_split = quote_split.split('/')[3]
-            handle = slash_split
+    soup = BeautifulSoup(data,'lxml')
+    
+    # extract 100 user links from the <a> tags on the page
+
+    for tag in soup.find_all('a'):
+        link = tag.get('href')
+        
+        # search for pattern using 
+        pattern = '^%s' % search_string
+        result = re.match(pattern,link)
+        
+        if result:
+            # extract handle after search term
+            handle = link[len(search_string):]
             pages[i]['handles'].append(handle)
 
 # set to True to print contents of each list
@@ -66,11 +75,11 @@ for i, h in enumerate(sorted_handles):
 # Sample result
 """
 Top Twitter handles
-1) 2m___m2
-2) 2morrowknight
-3) 2of__
-4) 2thank
-5) 5SOS
+1) 000120o
+2) 2m___m2
+3) 2morrowknight
+4) 2of__
+5) 2thank
 ...
 374) xtina
 375) yokoono
