@@ -23,19 +23,19 @@ pages = [dict(name= 'Top Followers', url= base_url % 'followers'),
          dict(name= 'Most Engagements', url = base_url % 'engagements')
          ]
 
-# Query each URL and store HTML RSULT
-
 search_string = '/twitter/user/'
+
+# Query each URL in pages list
+
 for i in range(len(pages)):
     pages[i]['handles'] = [] # create empty list in dict
     
+    # load data from url
     url = pages[i]['url']
     data = requests.get(url).text
-    
     soup = BeautifulSoup(data,'lxml')
     
-    # extract 100 user links from the <a> tags on the page
-
+    # find <a> tags on the page to get 100 users on page
     for tag in soup.find_all('a'):
         link = tag.get('href')
         
