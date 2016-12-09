@@ -31,39 +31,7 @@ or run adwords_to_csv.py directly
 """
 from googleads import adwords
 import datetime
-import config
-
-
-def GetMonthToDate(offset=0, format=''):
-    """
-    Return start and end dates for a period
-    Where end date is the X days before/after today if offset is set.
-    And start date is the first day of the end date's month.
-    If end date is the 1st of the month, then start date will be the same date.
-
-    Args
-        offset: optional integer.
-                Default to0 for today.
-                Set to -1 for yesterday.
-        format: optional string.
-                Default to '' to ignore formatting and return
-                dates as date objects.
-                Otherwise, use  '%Y%m%d' for YYYYMMDD output
-                                '%Y-%m-%d' for YYYY-MM-DD output
-                                etc.
-    Returns
-        startDate: start of period. Either as date object or as string
-                    using format input if set.
-        endDate: end of period. Either as date object or as string
-                    using format input if set.
-    """
-    today = datetime.date.today()
-    endDate = today + datetime.timedelta(days=offset)
-    startDate = datetime.date(endDate.year, endDate.month, 1)
-    if format:
-        startDate = startDate.strftime(format)
-        endDate = endDate.strftime(format)
-    return startDate, endDate
+import config_adwords as config
 
 def GetAdwordsData(client, path, report_query, version='v201609'):
     """
@@ -94,7 +62,7 @@ def GetAdwordsData(client, path, report_query, version='v201609'):
                                                      skip_report_header=True,
                                                      skip_column_header=False,
                                                      skip_report_summary=True)
-        print 'Report was downloaded to \'%s\'.' % path
+        print 'Saved -> %s' % path
     except IOError as e:
         print 'I/O error({0}): {1}'.format(e.errno, e.strerror)
         print 'for path \t%s' % path
@@ -105,7 +73,7 @@ def GetAdwordsData(client, path, report_query, version='v201609'):
         print 'for path \t%s' % path
         print
 
-def main():
+def Main():
     """
 	Read config file preferences,
 
@@ -118,36 +86,44 @@ def main():
 	create the file).
 	Store reports as 2 CSVs.
     """
-    # Initialize client object.
-    adwords_client = adwords.AdWordsClient.LoadFromStorage()
 
-    for report in config.adwordsSelectQueries:
-        startDate, endDate = GetMonthToDate(offset=report['offset'],
-                                            format='%Y%m%d')
+    # Get location of Adwords API credentials file
+    YAML_LOCATION = config.YAML_LOCATION
+    
+    # API version number
+    ADWORDS_VSN = config.ADWORDS_VSN
 
-        # CSV to overwrite existing file
-        fileName1 = 'data/%s.csv' % report['name']
+    # Pass credentials and initialize Adwords API client object 
+    adwords_obj = adwords.AdWordsClient.LoadFromStorage(YAML_LOCATION)
 
-        # a new CSV file in the log subfolder
-        fileName2 = 'data/log/%s_%s-%s.csv' % (report['name'], startDate,
-                                               endDate)
-        outfiles = [fileName1,fileName2]
+    adwords_accounts = config.adwords_accounts
 
-        # set YYYYMMDD dates for query
-        dateRange = '%s,%s' % (str(startDate), str(endDate))
+    for account in adwords_accounts: 
+        print 'Account: %s    ID: %s' % (account['name'], account['id'])
+        # set account id for adwords object
+        adwords_obj.SetClientCustomerId(account['id'])
 
-        # use select query from config file and insert dates
-        full_report_query = report['select'] % dateRange
+        # download report for current account
+        for report in config.adwords_queries:
 
-        # read API version from config
-        version = config.adwordsVsn
+            # read date range for each query
+            start_date, end_date = report['start_date'], report['end_date']
 
-        # Download and write data to locations
-        # (Please ensure /Users/michaelcurrin/googleads.yaml exists for
-        # authorisation to succeed.)
-        for path in outfiles:
-            GetAdwordsData(adwords_client, path, full_report_query,
-                               version=version)
+            # set names and directories for two identical files to be written
+            constant_file = 'data/%s_%s.csv' % (account['title'], 
+                                                report['name'])
+            log_file = 'data/history/%s_%s_%s-%s.csv' % (account['title'], 
+                                                     report['name'], 
+                                                     start_date,
+                                                     end_date)
+            out_files = [constant_file,log_file]
+
+            query = report['select']
+            
+            # Download and write data to locations
+            for path in out_files:
+                GetAdwordsData(adwords_obj, path, query, version=ADWORDS_VSN)
+        print
 
 if __name__ == '__main__':
-    main()
+    Main()
