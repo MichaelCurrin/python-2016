@@ -1,8 +1,10 @@
-#   Crontab file for Home Directory for Michael Currrin
+#   Crontab file for Home Directory for Michael Currin
 
 # SETUP
 SHELL=/bin/bash
 PATH=/Users/michaelcurrin/anaconda/bin:/Users/michaelcurrin/anaconda/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin
+
+# Or username e.g. michael e.g. root
 MAILTO=XXXX@XXXXX.com
 
 #-----------------------------------------------------------------------------
