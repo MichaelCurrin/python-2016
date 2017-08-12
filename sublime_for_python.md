@@ -4,7 +4,9 @@ My tips on setting up Sublime 3 with custom settings and packages for Python cod
 
 ## Sublime Settings
 
-This is what I use.
+This is what I use. Note that though when changing the font size with mouse-wheel scroll and holding control, the
+font_size is updated and the contents of user settings file is automatically rearranged by Sublime.
+All comments are removed and keys are arranged alphabetically.
 ```
 {
 	"auto_complete_commit_on_tab": true,
@@ -20,6 +22,7 @@ This is what I use.
 	[
 		"Vintage"
 	],
+	"indent_to_bracket": true,
 	"remember_full_screen": true,
 	"rulers":
 	[
@@ -30,9 +33,11 @@ This is what I use.
 	"show_line_endings": true,
 	"tab_size": 4,
 	"translate_tabs_to_spaces": true,
+	"trim_trailing_white_space_on_save": true,
 	"use_tab_stops": true,
 	"word_wrap": true
 }
+
 ```
 
 ## Linting
