@@ -10,7 +10,6 @@ Modify the package's user settings to
 ```
 {
     "debug": true,
-    "lint_on_save": false,
     "pep8_max_line_length": 80,
     "popup": false,
     "naming": false,
