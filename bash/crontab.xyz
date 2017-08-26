@@ -1,0 +1,42 @@
+#   Crontab file for Home Directory for Michael Currin
+
+# SETUP
+SHELL=/bin/bash
+PATH=/Users/michaelcurrin/anaconda/bin:/Users/michaelcurrin/anaconda/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin
+
+# Or username e.g. michael e.g. root
+MAILTO=XXXX@XXXXX.com
+
+#-----------------------------------------------------------------------------
+#Min    Hour    Day     Month   Weekday Command
+#-----------------------------------------------------------------------------
+# disk usage
+#0      *       *       *       1-5     du -h --max-depth=1 /
+# print environment
+0       12      *       *       1-5     source activate dashboard && conda info --env
+# Tech
+30      9       *       *       1,4     source activate dashboard && cd "Google Drive"/Cron/Scheduled_GA_Reporting && python execute_tech_report.py
+# Media
+30      9       *       *       1-5     source activate dashboard && cd "Google Drive"/Cron/Scheduled_GA_Reporting && python execute_media_report.py
+# Social
+30      9       *       *       1,4     source activate dashboard && cd "Google Drive"/Cron/SocialBasicTest && python social_handle_check.py
+# Trending data Twitter API pull
+0       9,12,15,18      *       *       *       source activate dashboard && cd "Google Drive"/Cron/Trending && python Twitter_trending.py
+
+
+# FORMATTING NOTE
+
+# Crontab uses 5 stars which MUST be separated by a tab and not spaces
+# *   *   *   *   *
+# these can be replaced with numeric values as below
+
+# * minute (0-59)
+# * hours (0-23)
+# * day (1-31)
+# * month (1-12)
+# * day of week (0 Sunday to 6 Saturday)
+
+# ENVIRONMENT NOTE
+# change environment to one with all libaries
+# this must be done for each row
+# source activate dashboard &&
