@@ -1,3 +1,3 @@
-# Learn SQL
+# MySQL
 
-A few basic scripts around SQL.
+A few basic scripts around MySQL and Python.
