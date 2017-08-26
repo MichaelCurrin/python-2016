@@ -5,6 +5,8 @@ Created on 11 Dec 2016
 This script is for working with unix timestamps and converting them
 to human-readable values.
 
+I've since found that datetime and time packages has this kind of conversion for readability already builtin.
+
 @author: michaelcurrin
 
 """
