@@ -12,15 +12,17 @@ For
  - Twitter TO BE ADDED
  - Instagram
  
-The reasons ithat IDs are more stable than handles which can be changed. 
+The reasons is that IDs are more stable than handles which can be changed. 
 And because Instagram API posts query can accept IDs and not handles.
 """
-import requests # get web data
-from bs4 import BeautifulSoup # process HTML
-import json # read <script> data
 import csv
+import json # read <script> data
+
+from bs4 import BeautifulSoup # process HTML
+import requests # get web data
 
 import config_social_handles as config
+
 
 def GetInstagramUserData(handle):
     """
@@ -67,8 +69,8 @@ def GetInstagramUserData(handle):
     out_dict['Followers'] = profile['followed_by']['count']
     return out_dict
  
-def Main():
-    
+ 
+def main():
     ### Get data for Instagram users ###
     
     user_data = []
@@ -92,31 +94,21 @@ def Main():
         for k, v in u.iteritems():
             print '%s:   %s' % (k, v)
         print
-        
-        
+  
     ### Write to CSV ###
-    
     out_name = 'out_data.csv'
     
-
-    """Use DictWrite to write out dictionary items instead
-    of tuple rows
-    The order is determined by fieldsnames
-    """
-         
+    # Use DictWrite to write out dictionary items instead of tuple rows.
+    # The order is determined by fieldsnames.      
     with open(out_name, 'w') as csvfile:
-    
-        
         # header
         fieldnames = ['Platform', 'ID', 'Handle',  'Full name', 'Followers']
-        
         
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     
         writer.writeheader()
             
         for user in user_data:
-            
             # convert UTF-8 if unicode, otherwise do not convert
             for key, value in user.iteritems():
                 if isinstance(value, unicode):
@@ -128,8 +120,7 @@ def Main():
         print 'Done - %s' % out_name
         
 if __name__ == '__main__':
-    Main()
-    
+    main()
 
 
 # Sample output
