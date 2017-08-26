@@ -14,6 +14,7 @@ The script then prints the details of the closest place including the distance t
 """
 import math
 
+
 def findDistance(A, B):
     """
     In 2D space find the distance between two co-ordinates is 
@@ -22,16 +23,13 @@ def findDistance(A, B):
         A: tuple or list of x and y co-ordinates 
             e.g. (1,2) e.g. [1,2]
         B: as A.
-    Retuns
+    Returns
         distance: float. Decimal value for shortest between A and B
     """
     x = (A[0] - B[0])
     y = (A[1] - B[1])
     distance = math.sqrt(x**2 + y**2) # square root
-    
-    # remove comment if you want to see this outputted
-    # print distance 
-    
+
     return distance
     
 
@@ -56,7 +54,7 @@ def GetClosestPlace(places, loc, feature):
          # add calculated distance to existing dictionary for location
         places[index]['distance'] = distance    
         
-    # find shortest distance and return details for that place
+    # Find shortest distance and return details for that place
     
     allDistances = [x['distance'] for x in places]
     shortestDistance = min(allDistances)
