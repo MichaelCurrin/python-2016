@@ -16,22 +16,26 @@ If the brand handle is still correct, then it can be used for followers- or post
 (If the fixed numerical ID of a FB page is used instead, then the FB queries would not be affected)
 """
 
-import smtplib # used to access Gmail
-from email.MIMEMultipart import MIMEMultipart # used to send mail
-from email.MIMEText import MIMEText # used to send mail
-import urllib2 # used to open FB graph queries
-import oauth2 as oauth #used query Twitter API
 import json # used to convert API JSON results to usable format
 import datetime #used to display times and durations
+from email.MIMEMultipart import MIMEMultipart # used to send mail
+from email.MIMEText import MIMEText # used to send mail
+import smtplib # used to access Gmail
+import urllib2 # used to open FB graph queries
+
+import oauth2 as oauth #used query Twitter API
+
 
 # here are a few handles to get you started. replace them as necessary
-FBInputCompetitorHandles = {'SetA': ['TEDEducation', 'ConstructiveEnlightenment','curiositydotcom'],
-                           'SetB': ['WorldOfPuns', 'dyesciencebro'],
-                            'DeliberateError':['abcxyz123xxx']
-                          } 
-TWInputCompetitorHandles = {'Health':['@CiplaRSA','@Novartis','@Pfizer_news'],
-                            'Rice':['@SpekkoSA','@Tastic_Rice']
-                           }
+FBInputCompetitorHandles = {
+    'SetA': ['TEDEducation', 'ConstructiveEnlightenment','curiositydotcom'],
+    'SetB': ['WorldOfPuns', 'dyesciencebro'],
+    'DeliberateError':['abcxyz123xxx']
+} 
+TWInputCompetitorHandles = {
+    'Health':['@CiplaRSA','@Novartis','@Pfizer_news'],
+      'Rice':['@SpekkoSA','@Tastic_Rice']
+}
 
 StartTime = datetime.datetime.now() # record start of program
 print 'Started at %s' % str(StartTime)
@@ -41,8 +45,9 @@ print 'Started at %s' % str(StartTime)
 addressList = ['user1@gmail.com','user2@yahoo.com'] # enter users you wish to send to
 
 
-def sendMail(inputText,inputSubject,inputToAddress) : # method to send mail with defined text, subject and to address
-    fromaddr = "myaccount@gmail.com" # replace with your gmail address
+def sendMail(inputText, inputSubject, inputToAddress):
+    # replace with your gmail address
+    fromaddr = "myaccount@gmail.com"
     toaddr = inputToAddress
     mypassword = 'password'
 
@@ -63,9 +68,7 @@ def sendMail(inputText,inputSubject,inputToAddress) : # method to send mail with
     server.quit()
 
 
-
 # ---------FACEBOOK SETUP-------------------------------
-
 
 ManualExtendedToken = 'XXXXXXXXXXXXXXXXXXXXXXXXXX'
 
@@ -78,7 +81,6 @@ ManualExtendedToken = 'XXXXXXXXXXXXXXXXXXXXXXXXXX'
 # 5 Copy and paste above.
 
 # the expiry date should be for 2 months time.
-
 
 
 #-------FACEBOOK METHODS------------------
@@ -96,8 +98,9 @@ def TestActiveToken(pageName, FBtoken):
 
 
 def TestFBUserAbout(pageName,FBtoken):
-    """check whether a page exists"""
-    
+    """
+    Check whether a page exists
+    """
     if pageName == 'n/a' or pageName == '' or pageName == '""': # return "OK" if the handle is n/a is empty
         result = 'OK'
     else:
@@ -112,9 +115,9 @@ def TestFBUserAbout(pageName,FBtoken):
     return result
 
 
-
 def FacebookCheck():
-    """return list of success and failures for Facebook handles list, with total counts
+    """
+    Return list of success and failures for Facebook handles list, with total counts
     """
     FBMessageList = ['FACEBOOK TESTING\n']
     FBfound = 0
@@ -158,7 +161,6 @@ def FacebookCheck():
 
 #-------TWITTER SETUP------------------
 
-
 # authorise Twitter API using registered app
 CONSUMER_KEY = "XXXXX"
 CONSUMER_SECRET = "XXXXX"
@@ -171,12 +173,10 @@ client = oauth.Client(consumer, access_token)
 
 #-------TWITTER ACTIONS------------------
 
-
 def TestActiveTwitterToken(handle):
     """
-    check whether the token details are valid
+    Check whether the Twitter token details are valid.
     """
-    
     try:
         twitterQuery = 'https://api.twitter.com/1.1/users/show.json?' + 'screen_name=' + handle
         T_response,json_string = client.request(twitterQuery)
@@ -185,12 +185,14 @@ def TestActiveTwitterToken(handle):
         result =  'Error', error
     except:
         result = 'OK', 'Token is valid. Testing continued.\n'
+        
     return result
 
 
 def TwitterReturnUserExists(handle):
-    """ check whether a handle exists"""
-    
+    """
+    Check whether a Twitter handle exists.
+    """
     if handle == 'n/a' or handle == '' or handle == '""': # return "OK" if the handle is n/a is empty
         result = 'OK'
     else:
@@ -202,13 +204,15 @@ def TwitterReturnUserExists(handle):
             result =  '---------------------------------Error!'
         except:
             result = 'OK'
+            
     return result
 
 
-
 def TwitterCheck():
-    """return list of success and failures for Twitter handles list with
-    total counts"""
+    """
+    Return list of success and failures for Twitter handles list with
+    total counts.
+    """
     TwitterMessageList = ['TWITTER TESTING\n\n']
     TWfound = 0
     TWmissing = 0
@@ -244,13 +248,11 @@ def TwitterCheck():
         # occasional error. possibly from rate limits.
         #"TypeError: sequence item 1: expected string, list found."
         return TwitterMessage, TWmissing
-    except:
+    except Exception:
         return 'Twitter check could not be completed',TWmissing
 
 
-
 #-------CREATE MAIL CONTENT------------------
-
 
 FacebookEmailMessage,FBEmailmissing = '', 0 # default values which can be overwritten by the next line
 FacebookEmailMessage,FBEmailmissing = FacebookCheck() # disable this line to turn FB off and still send a mail
@@ -276,7 +278,7 @@ FullMessagePart1 = ('Hello,\n\nPlease find  your Python cronjob testing results 
 CompletedTime = datetime.datetime.now() # current time in hours, minutes, seconds
 CompletedDate = datetime.date.today() # current date
 ElapsedTime = (CompletedTime - StartTime) # duration in hours, minutes seconds
-ElaspedSeconds=int(ElapsedTime.total_seconds()) #duration converted to seconds
+ElaspedSeconds = int(ElapsedTime.total_seconds()) #duration converted to seconds
 
 # format times and duration for the mail
 FullMessagePart2 = ('\n\n-----------------'
