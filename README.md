@@ -1,2 +1,7 @@
-# python-2016
-An archive of my first python scripts added to GitHub, merged from separate repos into one.
+# Python 2016
+
+Collection of my Python 2 scripts written up to 2016. 
+
+These were my first Python scripts on Github, previous in separate repos and then merged into one (but keep history, using a git tutorial).
+
+There are little or no library setup instructions here.
