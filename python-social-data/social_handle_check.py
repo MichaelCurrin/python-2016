@@ -3,8 +3,6 @@
 """
 Created on 14 March 2016
 
-@author: michaelcurrin
-
 This script is intended to do a daily check of inputted Facebook and Twitter handles from a CSV file,
 against the handles on Facebook API and Twitter API. 
 The results are automatically emailed, including number of errors in the subject and the specific
@@ -94,7 +92,8 @@ def TestActiveToken(pageName, FBtoken):
         urllib2.urlopen(graphURL).read() # test FB graph URL
         return 'OK','Token valid. Testing continued.'
     except:
-        return 'Error', 'Warning - token not valid! Please extend your token and update it in the script.' #or put the token in a CSV file in the same folder and setup a way to read from that
+         #or put the token in a CSV file in the same folder and setup a way to read from that
+        return 'Error', 'Warning - token not valid! Please extend your token and update it in the script.'
 
 
 def TestFBUserAbout(pageName,FBtoken):
@@ -123,14 +122,13 @@ def FacebookCheck():
     FBfound = 0
     FBmissing = 0
 
-    TokenStatus,TokenTestMessage = TestActiveToken('MichaelCurrinPhotography', ManualExtendedToken) # check whether token works by testing URL for a controlled page
+    # check whether token works by testing URL for a controlled page
+    TokenStatus,TokenTestMessage = TestActiveToken('MichaelCurrinPhotography', ManualExtendedToken)
     FBMessageList.append(TokenTestMessage) # add token feedback message
     FBMessageList.append('\n')
 
-
     # continue to test handles if token is valid
     if TokenStatus == 'OK':
-
         for clientName in FBInputCompetitorHandles:   # look through client names
 
             str1= clientName  # e.g. Amstel
@@ -208,16 +206,17 @@ def TwitterReturnUserExists(handle):
     return result
 
 
-def TwitterCheck():
+def TwitterCheck(handle):
     """
-    Return list of success and failures for Twitter handles list with
+    Return list of success and failures for Twitter handles list, with
     total counts.
     """
     TwitterMessageList = ['TWITTER TESTING\n\n']
     TWfound = 0
     TWmissing = 0
-
-    TokenStatus, TokenMessage = TestActiveTwitterToken('MichaelCurrin') # check whether token works by testing URL for a controlled page
+    
+    # check whether token works by testing URL for a controlled page
+    TokenStatus, TokenMessage = TestActiveTwitterToken(handle)
     TwitterMessageList.append(TokenMessage)
 
     # continue to test handles if token is valid
@@ -254,15 +253,15 @@ def TwitterCheck():
 
 #-------CREATE MAIL CONTENT------------------
 
-FacebookEmailMessage,FBEmailmissing = '', 0 # default values which can be overwritten by the next line
-FacebookEmailMessage,FBEmailmissing = FacebookCheck() # disable this line to turn FB off and still send a mail
+FacebookEmailMessage, FBEmailmissing = '', 0 # default values which can be overwritten by the next line
+FacebookEmailMessage, FBEmailmissing = FacebookCheck() # disable this line to turn FB off and still send a mail
 
 TwitterEmailMessage, TwitterEmailMissing = '', 0 # default values which can be overwritten by the next line
 TwitterEmailMessage, TwitterEmailMissing = TwitterCheck() # disable this line to turn FB off and still send a mail
 
 # manually inputted notes
 
-EmailNotes = ('NOTES:\nNone')
+EmailNotes = 'NOTES:\nNone'
 
 # test FB and Twitter and format for a mail
 FullMessagePart1 = ('Hello,\n\nPlease find  your Python cronjob testing results below'
