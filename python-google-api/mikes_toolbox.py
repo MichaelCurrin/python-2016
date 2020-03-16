@@ -10,16 +10,16 @@ script. The idea is that this mikes_toolbox.py script can be repurposed for othe
 scripts which also need date ranges, neat formatting for table data in the terminal, or 
 for sending mails.
 """
-import smtplib # used to access Gmail
-from email.MIMEMultipart import MIMEMultipart # used to send mail
-from email.MIMEText import MIMEText # used to send mail
+import smtplib  # used to access Gmail
+from email.MIMEMultipart import MIMEMultipart  # used to send mail
+from email.MIMEText import MIMEText  # used to send mail
 
 import datetime
 import time
 
 # download the original prettytable.py file from https://pypi.python.org/pypi/PrettyTable
 # then place it in the same directory as mikes_toolbox.py before importing it
-from prettytable import PrettyTable 
+from prettytable import PrettyTable
 
 
 def PrintFinishedTables(listOfTables, reportSummary):
@@ -28,12 +28,12 @@ def PrintFinishedTables(listOfTables, reportSummary):
     Print them with neat spacing.
     """
     print reportSummary
-    
+
     for site_segment_pairs in listOfTables:
         for tables in site_segment_pairs:
-            print tables # or tables.get_string()
-            print ''
-            
+            print tables  # or tables.get_string()
+            print ""
+
 
 def sendMail(body, inputSubject, fromAddr, toAddr, emailPassword):
     """
@@ -47,10 +47,10 @@ def sendMail(body, inputSubject, fromAddr, toAddr, emailPassword):
     Returns
         msg: full mail details
     """
-    msg = MIMEMultipart('alternative')
-    msg['From'] = fromAddr
-    msg['To'] = toAddr
-    msg['Subject'] = inputSubject
+    msg = MIMEMultipart("alternative")
+    msg["From"] = fromAddr
+    msg["To"] = toAddr
+    msg["Subject"] = inputSubject
 
     # create two iamges to be inserted at the top of the HTML mail
 
@@ -60,8 +60,7 @@ def sendMail(body, inputSubject, fromAddr, toAddr, emailPassword):
     # platform logo
     image2 = '<img src="https://developers.google.com/analytics/images/terms/logo_lockup_analytics_icon_vertical_black_2x.png" alt="GA" width="75"/>'
 
-    
-    # Create html message with font formatting 
+    # Create html message with font formatting
     # and breaks for new lines
     # and %20 for spaces
     html = """\
@@ -76,24 +75,29 @@ def sendMail(body, inputSubject, fromAddr, toAddr, emailPassword):
              <font face="Courier New, Courier, monospace", font size="+1"> <p>%s</p>
              </font>
         </body>
-    </html>""" % (image1, image2, inputSubject, body.replace('\n','<br>').replace(' ','&nbsp;'))
-    msg.attach(MIMEText(body, 'plain'))
-    msg.attach(MIMEText(html, 'html'))
+    </html>""" % (
+        image1,
+        image2,
+        inputSubject,
+        body.replace("\n", "<br>").replace(" ", "&nbsp;"),
+    )
+    msg.attach(MIMEText(body, "plain"))
+    msg.attach(MIMEText(html, "html"))
 
-    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server = smtplib.SMTP("smtp.gmail.com", 587)
     server.starttls()
 
     server.login(fromAddr, emailPassword)
     text = msg.as_string()
     server.sendmail(fromAddr, toAddr, text)
     server.quit()
-    
+
     return msg
 
 
-
-def EmailFinishedTables(listOfTables, inputSubject, fromAddress, toAddressList, 
-                        emailPassword):
+def EmailFinishedTables(
+    listOfTables, inputSubject, fromAddress, toAddressList, emailPassword
+):
     """
     Iterate through a list of tables as input from the GetAnalyticsData method.
     Combine them a text object list, with a new line for each line of the mail.
@@ -113,19 +117,19 @@ def EmailFinishedTables(listOfTables, inputSubject, fromAddress, toAddressList,
         # go through tuple
         for tables in sections:
             # split by \n so table doesn't become one string
-            mailRows += tables.get_string().split('\n')
-            mailRows += ['']
-            
-    # create single string using all rows list elements 
-    body = '\n'.join(mailRows)
-    
-    print 'Subject: %s' % inputSubject
+            mailRows += tables.get_string().split("\n")
+            mailRows += [""]
+
+    # create single string using all rows list elements
+    body = "\n".join(mailRows)
+
+    print "Subject: %s" % inputSubject
     for toAddr in toAddressList:
         sendMail(body, inputSubject, fromAddress, toAddr, emailPassword)
-        print 'Sent to: %s' % toAddr
-    
-    
-def formatTable(headerFormatted, rowValues, setBorder = True, setAlign = 'r'):
+        print "Sent to: %s" % toAddr
+
+
+def formatTable(headerFormatted, rowValues, setBorder=True, setAlign="r"):
     """
     Format a set of header and row values, using PrettyTable libary. 
     Align all columns to the right.
@@ -137,15 +141,15 @@ def formatTable(headerFormatted, rowValues, setBorder = True, setAlign = 'r'):
         setAlign: 'l', 'r' or 'c'. Default is right.
     Returns
         table: formatted PrettyTable object
-    """    
+    """
     prettyTable = PrettyTable()
     prettyTable.field_names = headerFormatted
     for rowData in rowValues:
-        prettyTable.add_row(rowData)        
+        prettyTable.add_row(rowData)
     prettyTable.align = setAlign
     prettyTable.border = setBorder
-    return prettyTable     
- 
+    return prettyTable
+
 
 def GetLast7DaysYesterday():
     """
@@ -155,21 +159,22 @@ def GetLast7DaysYesterday():
         startDate: date object. Start of period. 
         endDate: date object. End of period.
         countOfDays: integer. Number of days between start and end date
-    """ 
+    """
     # today's date as the time of running the script
     today = datetime.date.today()
-    
+
     # length of one day, in timedelta format
     oneDay = datetime.timedelta(days=1)
-    
+
     # set end date as yesterday, start date 7 days before
     endDate = today - oneDay
-    startDate = endDate - 6*oneDay
-    
+    startDate = endDate - 6 * oneDay
+
     countOfDays = endDate - startDate + oneDay
-    
+
     return startDate, endDate, countOfDays
-    
+
+
 def GetLast7DaysToday():
     """
     Set date range as max 7 days, starting 7 days before today and ending 
@@ -181,23 +186,23 @@ def GetLast7DaysToday():
         startDate: date object. Start of period. 
         endDate: date object. End of period.
         countOfDays: integer. Number of days between start and end date
-    """ 
+    """
     # today's date as the time of running the script
     today = datetime.date.today()
-    
+
     # length of one day, in timedelta format
     oneDay = datetime.timedelta(days=1)
-    
-    # set end date as today, start date as 7 days before today
-    endDate = today 
-    startDate = endDate - 6*oneDay
-    
-    countOfDays = endDate - startDate + oneDay
-    
-    return startDate, endDate, countOfDays   
 
-    
-def GetMonthToDateRange():    
+    # set end date as today, start date as 7 days before today
+    endDate = today
+    startDate = endDate - 6 * oneDay
+
+    countOfDays = endDate - startDate + oneDay
+
+    return startDate, endDate, countOfDays
+
+
+def GetMonthToDateRange():
     """
     Set date range as start of yesterday's month up to yesterday's date. 
     Note that if today is the 2nd of the month and yesterday was the 1st, 
@@ -207,23 +212,23 @@ def GetMonthToDateRange():
         startDate: date object. Start of period. 
         endDate: date object. End of period.
         countOfDays: integer. Number of days between start and end date
-    """ 
+    """
     # today's date as the time of running the script
     today = datetime.date.today()
-    
+
     # length of one day, in timedelta format
     oneDay = datetime.timedelta(days=1)
-    
+
     # set end date as yesterday, start date as the 1st day of yesterday's month
     endDate = today - oneDay
     startDate = datetime.date(endDate.year, endDate.month, 1)
-    
+
     countOfDays = endDate - startDate + oneDay
-    
+
     return startDate, endDate, countOfDays
 
 
-def testMail():    
+def testMail():
     # test mail functionality. this requires password to be entered
 
     body = """
@@ -251,44 +256,47 @@ def testMail():
     | =============== | ======== | ======= | ================ |
     |                 |        1 |       0 |                0 |
     +-----------------+----------+---------+------------------+]
-    """ 
-    inputSubject = 'Test'
-    fromAddr = 'XXX@XXX.com'
-    toAddr = 'XXXX@XXX'
-    
+    """
+    inputSubject = "Test"
+    fromAddr = "XXX@XXX.com"
+    toAddr = "XXXX@XXX"
+
     # Continue asking for the user for a password or 'X' to exit
     while True:
         print "Mail %s> " % fromAddr
         emailPassword = raw_input("Enter password or press Enter to ignore > ")
-        
-        #exit with blank inut or 'X'
-        if emailPassword.upper() == 'X' or emailPassword.upper() == '':
-            print ''            
+
+        # exit with blank inut or 'X'
+        if emailPassword.upper() == "X" or emailPassword.upper() == "":
+            print ""
             break
-        
-        #attempt to send mail and show error
+
+        # attempt to send mail and show error
         try:
             print sendMail(body, inputSubject, fromAddr, toAddr, emailPassword)
             break
         except:
-            print '...'
-            print 'Error - try again!'
-            print '...'
+            print "..."
+            print "Error - try again!"
+            print "..."
             # sleep 2 seconds
             time.sleep(2)
-            print ''
-        
+            print ""
+
+
 def testDates():
-    dateDict = dict(GetLast7DaysYesterday=GetLast7DaysYesterday(),
-                    GetLast7DaysToday=GetLast7DaysToday(),
-                    GetMonthToDateRange=GetMonthToDateRange())
-                     
+    dateDict = dict(
+        GetLast7DaysYesterday=GetLast7DaysYesterday(),
+        GetLast7DaysToday=GetLast7DaysToday(),
+        GetMonthToDateRange=GetMonthToDateRange(),
+    )
+
     for ranges in dateDict:
         print ranges
-        for items in dateDict[ranges]:         
+        for items in dateDict[ranges]:
             print str(items)
-        print ''
-        
+        print ""
+
     # example output where today was the 7th of July
     """
     GetMonthToDateRange
@@ -306,9 +314,9 @@ def testDates():
     2016-07-06
     7 days, 0:00:00
     """
-   
-    
-if __name__ == '__main__':
+
+
+if __name__ == "__main__":
     # run tests if this is the main script
     testMail()
     testDates()

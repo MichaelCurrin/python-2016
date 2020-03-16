@@ -26,12 +26,12 @@ def findDistance(A, B):
     Returns
         distance: float. Decimal value for shortest between A and B
     """
-    x = (A[0] - B[0])
-    y = (A[1] - B[1])
-    distance = math.sqrt(x**2 + y**2) # square root
+    x = A[0] - B[0]
+    y = A[1] - B[1]
+    distance = math.sqrt(x ** 2 + y ** 2)  # square root
 
     return distance
-    
+
 
 def GetClosestPlace(places, loc, feature):
     """find shortest distance between current location and each locations 
@@ -39,51 +39,51 @@ def GetClosestPlace(places, loc, feature):
 
     # add distance from current location to each location
     for index in range(len(places)):
-        
+
         # only continue if feature exists at place
-        if feature in places[index]['features']:
+        if feature in places[index]["features"]:
 
             # calculate
-            distance = findDistance(loc,
-                                    places[index]['location'])
+            distance = findDistance(loc, places[index]["location"])
         else:
             # this is to represent n/a for now as every location needs a distance
             # for this version, so that it will not be chosen
-            distance = 1000 
-        
-         # add calculated distance to existing dictionary for location
-        places[index]['distance'] = distance    
-        
+            distance = 1000
+
+        # add calculated distance to existing dictionary for location
+        places[index]["distance"] = distance
+
     # Find shortest distance and return details for that place
-    
-    allDistances = [x['distance'] for x in places]
+
+    allDistances = [x["distance"] for x in places]
     shortestDistance = min(allDistances)
-    
+
     for place in places:
-        if place['distance'] == shortestDistance:
+        if place["distance"] == shortestDistance:
             return place
 
-        
-placesList = [dict(name='foo',location=(0,3), features=['gas', 'food']),
-              dict(name='bar',location=(4,6), features=['food', 'hospital']),
-              dict(name='abc',location=(0,9), features=['gas','barber']),
-              dict(name='xyz',location=(2,2), features=['food','barber'])
-              ]
-                        
-currentLocation = (5,9)
-desiredFeature='food'
+
+placesList = [
+    dict(name="foo", location=(0, 3), features=["gas", "food"]),
+    dict(name="bar", location=(4, 6), features=["food", "hospital"]),
+    dict(name="abc", location=(0, 9), features=["gas", "barber"]),
+    dict(name="xyz", location=(2, 2), features=["food", "barber"]),
+]
+
+currentLocation = (5, 9)
+desiredFeature = "food"
 
 closestPlace = GetClosestPlace(placesList, currentLocation, desiredFeature)
 
-print 'Current location: %s' % str(currentLocation)
-print 'Desired feature: %s ' % desiredFeature
+print "Current location: %s" % str(currentLocation)
+print "Desired feature: %s " % desiredFeature
 print
-print 'The closest place is...'
-print 'Name: %s' % closestPlace['name']
-print 'Location %s' % str(closestPlace['location'])
-print 'Distance %f' % closestPlace['distance']
+print "The closest place is..."
+print "Name: %s" % closestPlace["name"]
+print "Location %s" % str(closestPlace["location"])
+print "Distance %f" % closestPlace["distance"]
 # join multiple features in the list with commas
-print 'Features: %s' % ', '.join(closestPlace['features'])
+print "Features: %s" % ", ".join(closestPlace["features"])
 
 """
 OUTPUT

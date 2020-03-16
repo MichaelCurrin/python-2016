@@ -21,20 +21,22 @@ then storing the date-value pairs in a database.
 Let me know if this script comes in handy for anyone.
 """
 import datetime
-import urllib2 # access the web
-import json # convert from JSON format into Python lists and dictionaries
+import urllib2  # access the web
+import json  # convert from JSON format into Python lists and dictionaries
 
-#==============================================================================
+# ==============================================================================
 # Date methods
-#==============================================================================
+# ==============================================================================
+
 
 def GetTodayString():
     """
     Return today's date as YYYY-MM-DD format
     """
     return str(datetime.date.today())
- 
-def ConvertStringToDate(dateString):   
+
+
+def ConvertStringToDate(dateString):
     """
     Convert a date in string format to date object and return it.
     Args
@@ -42,9 +44,10 @@ def ConvertStringToDate(dateString):
     Returns 
         dateObject: date object. e.g. datetime.date(2016,7,5)
     """
-    dateObject = datetime.datetime.strptime(dateString,'%Y-%m-%d').date()
+    dateObject = datetime.datetime.strptime(dateString, "%Y-%m-%d").date()
     return dateObject
-    
+
+
 def GetDateRange(startDate, endDate):
     """
     Args
@@ -53,15 +56,16 @@ def GetDateRange(startDate, endDate):
     Returns
         dateRange: list of dates for period, in datetime.date format.
     """
-    #calculate number of days in range
-    oneDayMargin = datetime.timedelta(days = 1)
+    # calculate number of days in range
+    oneDayMargin = datetime.timedelta(days=1)
     countDays = endDate - startDate + oneDayMargin
     countDaysInt = countDays.days
-    
+
     # create a list of each day from start to end date
-    dateRange = [startDate + oneDayMargin*x for x in range(countDaysInt)]
-    
+    dateRange = [startDate + oneDayMargin * x for x in range(countDaysInt)]
+
     return dateRange
+
 
 def GetLastNDays(n):
     """
@@ -73,21 +77,23 @@ def GetLastNDays(n):
         endDate: datetime.date object. End of period (today)
     """
     endDate = datetime.date.today()
-    startDate = endDate - datetime.timedelta(days = (n-1))
+    startDate = endDate - datetime.timedelta(days=(n - 1))
     return startDate, endDate
 
 
-#==============================================================================
+# ==============================================================================
 # Currency methods
-#==============================================================================
+# ==============================================================================
 
-def GetRateURL(base, symbols, date= 'latest'):
+
+def GetRateURL(base, symbols, date="latest"):
     """Create the URL needed to access the API.
     For a date and chosen currencies."""
-    url = 'http://api.fixer.io/%s?base=%s&symbols=%s' % (date, base, symbols)
-    return url   
-    
-def GetRateBaseSymbol(base, symbol, date= 'latest'):
+    url = "http://api.fixer.io/%s?base=%s&symbols=%s" % (date, base, symbols)
+    return url
+
+
+def GetRateBaseSymbol(base, symbol, date="latest"):
     """
     Args
         base: string. e.g. USD. Name of original currency, as 3 characters        
@@ -101,21 +107,22 @@ def GetRateBaseSymbol(base, symbol, date= 'latest'):
         exchange: user-friedly display of conversation rate to 2 decimal places
     """
     # remove any additional characters after first symbol
-    symbol = symbol[:3] 
-    
+    symbol = symbol[:3]
+
     # get data from API
     url = GetRateURL(base, symbol, date)
     json_string = urllib2.urlopen(url).read()
     data = json.loads(json_string)
-    
+
     # store returned date and currency rate
-    returnedDate, rate = data['date'], data['rates'][symbol]
-    
+    returnedDate, rate = data["date"], data["rates"][symbol]
+
     # format exchange rate in easy to read string
-    exchange = '1 %s = %s %s' % (base, rate, symbol)
-    
+    exchange = "1 %s = %s %s" % (base, rate, symbol)
+
     return returnedDate, rate, exchange
-    
+
+
 def GetRatesForRange(base, symbol, startDate, endDate):
     """
     Return pairs of dates and rates for a 2 currencies and given date range.
@@ -123,59 +130,57 @@ def GetRatesForRange(base, symbol, startDate, endDate):
     """
     # create date range list
     dateRange = GetDateRange(startDate, endDate)
-    
+
     # create a list of date and rate pairs by accessing the API for each day
-    dailyRates = [GetRateBaseSymbol(base, symbol, str(date)) \
-                                                    for date in dateRange]
-                                                        
+    dailyRates = [GetRateBaseSymbol(base, symbol, str(date)) for date in dateRange]
+
     # create a new list without duplicates
     # since the API sometimes returns an identical date and value combinations
-    # for consecutive days.     
-    dailyRatesDeDuped = []                                                    
+    # for consecutive days.
+    dailyRatesDeDuped = []
     for value in dailyRates:
         if value not in dailyRatesDeDuped:
             dailyRatesDeDuped.append(value)
-                                                    
-    return  dailyRatesDeDuped
+
+    return dailyRatesDeDuped
 
 
-#==============================================================================
+# ==============================================================================
 # Test this script
-#==============================================================================
+# ==============================================================================
 
-if __name__ == '__main__':
-    base ='USD'
-    symbol = 'ZAR'    
-    
-    print 'Testing exchange_rate.py and getting API data...'
+if __name__ == "__main__":
+    base = "USD"
+    symbol = "ZAR"
+
+    print "Testing exchange_rate.py and getting API data..."
     print
-    print '***** TEST 1 *****'
+    print "***** TEST 1 *****"
     print "Most recent day available"
     print "(This may be yesterday's value if today is not in the API)"
     ZAR_data = GetRateBaseSymbol(base, symbol)
-    for x in ZAR_data: 
-        print x    
-    
+    for x in ZAR_data:
+        print x
+
     print
-    
-    print '***** TEST 2 *****'
-    print 'Date Range for %s to %s ' % (symbol, base)
-    print 
-    
+
+    print "***** TEST 2 *****"
+    print "Date Range for %s to %s " % (symbol, base)
+    print
+
     # use sample dates of 1 to 26 July as YYYY-MM-DD input
-    startStr = '2016-07-01'
-    endStr = '2016-07-26'
+    startStr = "2016-07-01"
+    endStr = "2016-07-26"
     start = ConvertStringToDate(startStr)
     end = ConvertStringToDate(endStr)
 
     # create list of data pairs
     dailyRates = GetRatesForRange(base, symbol, start, end)
-    
+
     # print data
     for x in dailyRates:
-        print x[0], x[1] # ignore 'exchange' in [x2] for testing
+        print x[0], x[1]  # ignore 'exchange' in [x2] for testing
 
-     
     # Sample output shown below
     """
     Testing exchange_rate.py and getting API data...

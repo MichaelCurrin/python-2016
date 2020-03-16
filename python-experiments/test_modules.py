@@ -20,59 +20,66 @@ Note that "python" can be omitted from
 print "starting imports..."
 print
 
-print '#### Basic ####'
+print "#### Basic ####"
 try:
-	import httplib2
-	print 'OKAY - httplib2'
+    import httplib2
+
+    print "OKAY - httplib2"
 except ImportError as e:
-	print 'ERROR - %s' % e
+    print "ERROR - %s" % e
 
 try:
-	import oauth2
-	print 'OKAY - oauth2'
-except ImportError as e:
-	print 'ERROR - %s' % e
+    import oauth2
 
-print
-print '#### Facebook Ads ####'
-try:
-	import facebookads
-	print 'OKAY'
+    print "OKAY - oauth2"
 except ImportError as e:
-	print 'ERROR - %s' % e
+    print "ERROR - %s" % e
 
 print
-print '#### Google Analytics ####'
+print "#### Facebook Ads ####"
 try:
-	from apiclient.discovery import build
-	print 'OKAY - apiclient'
-except ImportError as e:
-	print 'ERROR - %s' % e
+    import facebookads
 
-try:
-	from oauth2client.service_account import ServiceAccountCredentials
-	print 'OKAY - oauth2client'
+    print "OKAY"
 except ImportError as e:
-	print 'ERROR - %s' % e
+    print "ERROR - %s" % e
 
 print
-print '#### Google Sheets ####'
+print "#### Google Analytics ####"
 try:
-	from apiclient import discovery
-	from oauth2client import client
-	from oauth2client import tools
-	from oauth2client.file import Storage
-	print 'OKAY'
+    from apiclient.discovery import build
+
+    print "OKAY - apiclient"
 except ImportError as e:
-	print 'ERROR - %s' % e
+    print "ERROR - %s" % e
+
+try:
+    from oauth2client.service_account import ServiceAccountCredentials
+
+    print "OKAY - oauth2client"
+except ImportError as e:
+    print "ERROR - %s" % e
 
 print
-print '#### Google Ads ####'
+print "#### Google Sheets ####"
 try:
-	import googleads
-	print 'OKAY'
+    from apiclient import discovery
+    from oauth2client import client
+    from oauth2client import tools
+    from oauth2client.file import Storage
+
+    print "OKAY"
 except ImportError as e:
-	print 'ERROR - %s' % e
+    print "ERROR - %s" % e
+
+print
+print "#### Google Ads ####"
+try:
+    import googleads
+
+    print "OKAY"
+except ImportError as e:
+    print "ERROR - %s" % e
 
 print
 print "ended"

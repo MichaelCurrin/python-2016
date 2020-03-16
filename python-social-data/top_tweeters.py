@@ -8,66 +8,67 @@ by scraping data from four top 100 lists from socialblade.com
 Create a list of unique handles across the lists. 
 Sort and print it.
 """
-import requests # for opening URLs
-from bs4 import BeautifulSoup # for processing HTML tags
-import re # for regex matches
+import requests  # for opening URLs
+from bs4 import BeautifulSoup  # for processing HTML tags
+import re  # for regex matches
 
 # Setup categories and URLs
 
-base_url = 'https://socialblade.com/twitter/top/100/%s'
-pages = [dict(name= 'Top Followers', url= base_url % 'followers'),
-         dict(name= 'Top Following', url= base_url % 'following'),
-         dict(name= 'Most Tweets', url= base_url % 'tweets'),
-         dict(name= 'Most Engagements', url = base_url % 'engagements')
-         ]
+base_url = "https://socialblade.com/twitter/top/100/%s"
+pages = [
+    dict(name="Top Followers", url=base_url % "followers"),
+    dict(name="Top Following", url=base_url % "following"),
+    dict(name="Most Tweets", url=base_url % "tweets"),
+    dict(name="Most Engagements", url=base_url % "engagements"),
+]
 
-search_string = '/twitter/user/'
+search_string = "/twitter/user/"
 
 # Query each URL in pages list
 
 for i in range(len(pages)):
-    pages[i]['handles'] = [] # create empty list in dict
-    
+    pages[i]["handles"] = []  # create empty list in dict
+
     # load data from url
-    url = pages[i]['url']
+    url = pages[i]["url"]
     data = requests.get(url).text
-    soup = BeautifulSoup(data,'lxml')
-    
+    soup = BeautifulSoup(data, "lxml")
+
     # find <a> tags on the page to get 100 users on page
-    for tag in soup.find_all('a'):
-        link = tag.get('href')
-        
-        # search for pattern using 
-        pattern = '^%s' % search_string
-        result = re.match(pattern,link)
-        
+    for tag in soup.find_all("a"):
+        link = tag.get("href")
+
+        # search for pattern using
+        pattern = "^%s" % search_string
+        result = re.match(pattern, link)
+
         if result:
             # extract handle after search term
-            handle = link[len(search_string):]
-            pages[i]['handles'].append(handle)
+            handle = link[len(search_string) :]
+            pages[i]["handles"].append(handle)
 
 # set to True to print contents of each list
-if False: 
+if False:
     for item in pages:
-        print item['name']
-        print '----------'
-        for i, h in enumerate(item['handles']):
-            print '%i) %s' % (i+1, h)  
+        print item["name"]
+        print "----------"
+        for i, h in enumerate(item["handles"]):
+            print "%i) %s" % (i + 1, h)
         print
-            
+
 # Create unique list
 unique_handles = []
 
 for item in pages:
-    for handle in item['handles']:
+    for handle in item["handles"]:
         if handle not in unique_handles:
-            unique_handles.append(handle)  
+            unique_handles.append(handle)
 
 # Sort and print unique list
 sorted_handles = sorted(unique_handles)
-print 'Top Twitter handles'
+print "Top Twitter handles"
 for i, h in enumerate(sorted_handles):
-    print '%i) %s' % (i+1, h)
+    print "%i) %s" % (i + 1, h)
 
 
 # Sample result

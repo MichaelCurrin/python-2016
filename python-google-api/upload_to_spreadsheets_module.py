@@ -19,8 +19,8 @@ URL: https://docs.google.com/spreadsheets/d/XXXXXXXXXX/edit#gid=YYYYYYYY
     The worksheet id is YYYYYYYY and is independent of the sheet's name.
 """
 import httplib2  # access www
-import os # access to read/write files
-import csv # read/write CSVs
+import os  # access to read/write files
+import csv  # read/write CSVs
 
 # access Google Sheets API
 from apiclient import discovery
@@ -34,6 +34,7 @@ from googleapiclient import errors as google_errors
 ###############################################################################
 # Table
 ###############################################################################
+
 
 def ReadCSV(fileName):
     """
@@ -49,11 +50,12 @@ def ReadCSV(fileName):
     data = []
     # 'rU' is needed because of errors reading some characters
     # U is for universal
-    with open(fileName, 'rU') as f:
+    with open(fileName, "rU") as f:
         reader = csv.reader(f)
         for row in reader:
             data.append(row)
     return data
+
 
 '''def MakeEmptyTable(full_table):
     """
@@ -76,6 +78,7 @@ def ReadCSV(fileName):
         blank_row = ['']*len(row)
         blank_table.append(blank_row)
     return blank_table'''
+
 
 def MakeEmptyTable(in_table=[[]], row_count=0, column_count=0):
     """
@@ -109,18 +112,20 @@ def MakeEmptyTable(in_table=[[]], row_count=0, column_count=0):
                         row  will be used.
     """
     if not row_count:
-        row_count = len(in_table) # length of table
+        row_count = len(in_table)  # length of table
 
     if not column_count:
-        column_count = len(in_table[0]) # length of first row of table
+        column_count = len(in_table[0])  # length of first row of table
 
-    row_contents = ['']*column_count # repeat '' for X columns
-    blank_table = [row_contents]*row_count # repeat blank row for Y rows
+    row_contents = [""] * column_count  # repeat '' for X columns
+    blank_table = [row_contents] * row_count  # repeat blank row for Y rows
     return blank_table
+
 
 ###############################################################################
 # Authorise Sheets API
 ###############################################################################
+
 
 def GetCredentials():
     """
@@ -133,13 +138,12 @@ def GetCredentials():
     Returns:
         credentials, the obtained credentials.
     """
-    home_dir = os.path.expanduser('~')
-    credential_dir = os.path.join(home_dir, '.credentials')
+    home_dir = os.path.expanduser("~")
+    credential_dir = os.path.join(home_dir, ".credentials")
     if not os.path.exists(credential_dir):
         os.makedirs(credential_dir)
-    credentials_filename='sheets.googleapis.com-python-insights.json'
-    credential_path = os.path.join(credential_dir,
-                                   credentials_filename)
+    credentials_filename = "sheets.googleapis.com-python-insights.json"
+    credential_path = os.path.join(credential_dir, credentials_filename)
 
     store = Storage(credential_path)
     credentials = store.get()
@@ -148,26 +152,28 @@ def GetCredentials():
         flow.user_agent = APPLICATION_NAME
         if flags:
             credentials = tools.run_flow(flow, store, flags)
-        else: # Needed only for compatibility with Python 2.6
+        else:  # Needed only for compatibility with Python 2.6
             credentials = tools.run(flow, store)
-        print('Storing credentials to ' + credential_path)
+        print ("Storing credentials to " + credential_path)
     return credentials
+
 
 def GetService():
     credentials = GetCredentials()
     http = credentials.authorize(httplib2.Http())
-    discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
-                    'version=v4')
-    service = discovery.build('sheets', 'v4', http=http,
-                              discoveryServiceUrl=discoveryUrl)
+    discoveryUrl = "https://sheets.googleapis.com/$discovery/rest?" "version=v4"
+    service = discovery.build(
+        "sheets", "v4", http=http, discoveryServiceUrl=discoveryUrl
+    )
     return service
 
-#==============================================================================
-# Read and write data with Sheets API
-#==============================================================================
 
-def GetGSheetsRange(service, spreadsheetId, range_name, test_print_rows=0,
-                    quiet=True):
+# ==============================================================================
+# Read and write data with Sheets API
+# ==============================================================================
+
+
+def GetGSheetsRange(service, spreadsheetId, range_name, test_print_rows=0, quiet=True):
     """Read data fom Google Spreadsheets using API.
 
     Args
@@ -180,17 +186,21 @@ def GetGSheetsRange(service, spreadsheetId, range_name, test_print_rows=0,
     Returns
         values: list of lists. The rows and columns read from the sheet.
     """
-    
-    result = service.spreadsheets().values().get(
-        spreadsheetId=spreadsheetId, range=range_name).execute()
 
-    values = result.get('values', [])
+    result = (
+        service.spreadsheets()
+        .values()
+        .get(spreadsheetId=spreadsheetId, range=range_name)
+        .execute()
+    )
+
+    values = result.get("values", [])
 
     if not quiet:
-        print '  READ RESULT'
+        print "  READ RESULT"
         for k, v in result.iteritems():
-            if k is not 'values':
-                print '   %s: %s' % (k, v)
+            if k is not "values":
+                print "   %s: %s" % (k, v)
     """
     # Example
     range: tb_staging_camp_perf!A1:Q1000
@@ -198,25 +208,27 @@ def GetGSheetsRange(service, spreadsheetId, range_name, test_print_rows=0,
     152 rows returned  
     """
     if values:
-        print '%i rows returned' % len(values)
+        print "%i rows returned" % len(values)
     else:
-        print 'No data returned!'
+        print "No data returned!"
     print
 
     if not quiet:
         if test_print_rows:
             print_values = values[:test_print_rows]
-            print 'printing %i rows...' % len(print_values)
+            print "printing %i rows..." % len(print_values)
             print
-            print range_name # e.g. tb_staging_camp_day!A1:Z1000
-            print '='*len(range_name)
+            print range_name  # e.g. tb_staging_camp_day!A1:Z1000
+            print "=" * len(range_name)
             for row in print_values:
-                print ','.join(row)
+                print ",".join(row)
             print
     return values
 
-def InsertGSheetsRows(service, spreadsheetId, range_name, values,
-                      value_input_option='RAW', quiet=True):
+
+def InsertGSheetsRows(
+    service, spreadsheetId, range_name, values, value_input_option="RAW", quiet=True
+):
     """Insert or append data to Google Spreadsheets using API.
 
     Args
@@ -227,16 +239,24 @@ def InsertGSheetsRows(service, spreadsheetId, range_name, values,
         value_input_option: string. optional.
             either 'RAW' for conveting numbers and dates to text using '
     """
-    body = {
-      'values': values
-    }
-    result = service.spreadsheets().values().append(
-                    spreadsheetId=spreadsheetId, range=range_name,
-                    valueInputOption=value_input_option, body=body).execute()
+    body = {"values": values}
+    result = (
+        service.spreadsheets()
+        .values()
+        .append(
+            spreadsheetId=spreadsheetId,
+            range=range_name,
+            valueInputOption=value_input_option,
+            body=body,
+        )
+        .execute()
+    )
     print result
 
-def WriteGSheetsRange(service, spreadsheetId, range_name, values,
-                      value_input_option='RAW', quiet=True):
+
+def WriteGSheetsRange(
+    service, spreadsheetId, range_name, values, value_input_option="RAW", quiet=True
+):
     """Write data to Google Spreadsheets using API.
 
     Args
@@ -248,15 +268,23 @@ def WriteGSheetsRange(service, spreadsheetId, range_name, values,
             either 'RAW' for conveting numbers and dates to text using '
             or 'USER_ENTERED' for normal formatting.
     """
-    body = {'values':values}
-    result = service.spreadsheets().values().update(
-        spreadsheetId=spreadsheetId, range=range_name,
-        valueInputOption=value_input_option, body=body).execute()
+    body = {"values": values}
+    result = (
+        service.spreadsheets()
+        .values()
+        .update(
+            spreadsheetId=spreadsheetId,
+            range=range_name,
+            valueInputOption=value_input_option,
+            body=body,
+        )
+        .execute()
+    )
 
     if not quiet:
-        print '  WRITE RESULT'
+        print "  WRITE RESULT"
         for k, v in result.iteritems():
-            print '    %s: %s' % (k, v)
+            print "    %s: %s" % (k, v)
         print
     """
     # example
@@ -266,6 +294,7 @@ def WriteGSheetsRange(service, spreadsheetId, range_name, values,
     updatedRows: 630
     updatedColumns: 15
     """
+
 
 def OverwriteCells(service, spreadsheetId, sheet, newValues, quiet=True):
     """
@@ -278,88 +307,105 @@ def OverwriteCells(service, spreadsheetId, sheet, newValues, quiet=True):
     Deleting rows or columns would unfortunately references from other sheets
     to that one, plus arrangment of other cells on that sheeg.
     """
-    print 'Sheet:  %s' % sheet
-    print 'Command:  Upload to sheets, overwriting data'
+    print "Sheet:  %s" % sheet
+    print "Command:  Upload to sheets, overwriting data"
     try:
-        print 'Reading existing values...'
+        print "Reading existing values..."
         preview = 3
-        existingValues = GetGSheetsRange(service, spreadsheetId, sheet,preview,
-                                        quiet=quiet)
-        print 'Emptying table...'
+        existingValues = GetGSheetsRange(
+            service, spreadsheetId, sheet, preview, quiet=quiet
+        )
+        print "Emptying table..."
         emptyValues = MakeEmptyTable(existingValues)
-        WriteGSheetsRange(service, spreadsheetId, sheet, emptyValues,
-                            quiet=quiet)
-        print 'Uploading new data...'
-        WriteGSheetsRange(service, spreadsheetId, sheet, newValues,
-                           value_input_option='USER_ENTERED',quiet=quiet)
-        print 
-        print 'Done.'
-        
+        WriteGSheetsRange(service, spreadsheetId, sheet, emptyValues, quiet=quiet)
+        print "Uploading new data..."
+        WriteGSheetsRange(
+            service,
+            spreadsheetId,
+            sheet,
+            newValues,
+            value_input_option="USER_ENTERED",
+            quiet=quiet,
+        )
+        print
+        print "Done."
+
     except google_errors.HttpError as h:
-        print 'ERROR'
-        print ' - Http connection to Google Sheets failed!'
-        print ' - %s' % h
+        print "ERROR"
+        print " - Http connection to Google Sheets failed!"
+        print " - %s" % h
     print
     print
 
-def DeleteGSheetsRange(service, spreadsheetId, sheetId,
-                       startIndex, endIndex, dimension='COLUMNS', quiet=True):
+
+def DeleteGSheetsRange(
+    service,
+    spreadsheetId,
+    sheetId,
+    startIndex,
+    endIndex,
+    dimension="COLUMNS",
+    quiet=True,
+):
     """Delete a range from a spreadsheet
     Note that references to cells which are deleted are not moved
     but become invlaid, as "=#REF!".
     """
-    body = { "requests": [ {
-                            "deleteDimension" : {
-                                "range":{
-                                  "sheetId": sheetId, # id  taken from gid=...
-                                  "dimension": dimension,
-                                  "startIndex": startIndex, # starting from 0
-                                  "endIndex": endIndex
-                                  #otherwise read from sheet first
-                                }
-                             }
-                            }
-                         ],
+    body = {
+        "requests": [
+            {
+                "deleteDimension": {
+                    "range": {
+                        "sheetId": sheetId,  # id  taken from gid=...
+                        "dimension": dimension,
+                        "startIndex": startIndex,  # starting from 0
+                        "endIndex": endIndex
+                        # otherwise read from sheet first
+                    }
+                }
             }
-    result = service.spreadsheets().batchUpdate(
-                  spreadsheetId=spreadsheetId,
-                  body=body).execute()
+        ],
+    }
+    result = (
+        service.spreadsheets()
+        .batchUpdate(spreadsheetId=spreadsheetId, body=body)
+        .execute()
+    )
 
     if not quiet:
-        print 'DELETE RESULT'
+        print "DELETE RESULT"
         for k, v in result.iteritems():
-            print '%s: %s' % (k, v)
+            print "%s: %s" % (k, v)
         print
+
 
 def Test():
     """run this script using test() for a demo of this script.
     Hardcoded values are used for data and sheet id"""
 
-    #https://docs.google.com/spreadsheets/d/1CR_8w8ZYeu8gD9X3UwwtuZA2djj5jCpNSFycNSXM_GY/edit#gid=1608909088
+    # https://docs.google.com/spreadsheets/d/1CR_8w8ZYeu8gD9X3UwwtuZA2djj5jCpNSFycNSXM_GY/edit#gid=1608909088
     # setup
-    
-    service = GetService() 
+
+    service = GetService()
     # - preface as upload.GetService() if use in another file
 
     # doc: db_adwords
-    spreadsheetId = '1CR_8w8ZYeu8gD9X3UwwtuZA2djj5jCpNSFycNSXM_GY'
+    spreadsheetId = "1CR_8w8ZYeu8gD9X3UwwtuZA2djj5jCpNSFycNSXM_GY"
 
     # READ
-    read_sheet = 'Sheet2' # please make sure this exists first
-    read_data = GetGSheetsRange(service, spreadsheetId, read_sheet,
-            quiet=False)
+    read_sheet = "Sheet2"  # please make sure this exists first
+    read_data = GetGSheetsRange(service, spreadsheetId, read_sheet, quiet=False)
     print len(read_data)
 
     # WRITE
-    write_sheet = 'Sheet1'
-    newValues = [['a','bbbb','ccc'], ['235235'],['325235235','dgdfg','fdgfdg']]
-    OverwriteCells(service, spreadsheetId, write_sheet, newValues,
-        quiet=False)
+    write_sheet = "Sheet1"
+    newValues = [["a", "bbbb", "ccc"], ["235235"], ["325235235", "dgdfg", "fdgfdg"]]
+    OverwriteCells(service, spreadsheetId, write_sheet, newValues, quiet=False)
 
     # DELETE
     DeleteSheetId = 1608909088
-    DeleteGSheetsRange(service, spreadsheetId, DeleteSheetId, 0, 3,
-        quiet=False)
+    DeleteGSheetsRange(service, spreadsheetId, DeleteSheetId, 0, 3, quiet=False)
 
-if __name__ == '__main__':    
-    Test() 
+
+if __name__ == "__main__":
+    Test()

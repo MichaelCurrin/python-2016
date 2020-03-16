@@ -33,7 +33,8 @@ from googleads import adwords
 import datetime
 import config_adwords as config
 
-def GetAdwordsData(client, path, report_query, version='v201609'):
+
+def GetAdwordsData(client, path, report_query, version="v201609"):
     """
     Query the Adwords API and download CSV reports
 
@@ -55,23 +56,27 @@ def GetAdwordsData(client, path, report_query, version='v201609'):
 
     try:
         # write out to CSV
-        with open(path, 'w') as output_file:
-            report_downloader.DownloadReportWithAwql(report_query,
-                                                     'CSV',
-                                                     output_file,
-                                                     skip_report_header=True,
-                                                     skip_column_header=False,
-                                                     skip_report_summary=True)
-        print 'Saved -> %s' % path
+        with open(path, "w") as output_file:
+            report_downloader.DownloadReportWithAwql(
+                report_query,
+                "CSV",
+                output_file,
+                skip_report_header=True,
+                skip_column_header=False,
+                skip_report_summary=True,
+            )
+        print "Saved -> %s" % path
     except IOError as e:
-        print 'I/O error({0}): {1}'.format(e.errno, e.strerror)
-        print 'for path \t%s' % path
+        print "I/O error({0}): {1}".format(e.errno, e.strerror)
+        print "for path \t%s" % path
         print
     except:
         import sys
-        print 'Unexpected error: ', sys.exc_info()[0]
-        print 'for path \t%s' % path
+
+        print "Unexpected error: ", sys.exc_info()[0]
+        print "for path \t%s" % path
         print
+
 
 def Main():
     """
@@ -89,41 +94,43 @@ def Main():
 
     # Get location of Adwords API credentials file
     YAML_LOCATION = config.YAML_LOCATION
-    
+
     # API version number
     ADWORDS_VSN = config.ADWORDS_VSN
 
-    # Pass credentials and initialize Adwords API client object 
+    # Pass credentials and initialize Adwords API client object
     adwords_obj = adwords.AdWordsClient.LoadFromStorage(YAML_LOCATION)
 
     adwords_accounts = config.adwords_accounts
 
-    for account in adwords_accounts: 
-        print 'Account: %s    ID: %s' % (account['name'], account['id'])
+    for account in adwords_accounts:
+        print "Account: %s    ID: %s" % (account["name"], account["id"])
         # set account id for adwords object
-        adwords_obj.SetClientCustomerId(account['id'])
+        adwords_obj.SetClientCustomerId(account["id"])
 
         # download report for current account
         for report in config.adwords_queries:
 
             # read date range for each query
-            start_date, end_date = report['start_date'], report['end_date']
+            start_date, end_date = report["start_date"], report["end_date"]
 
             # set names and directories for two identical files to be written
-            constant_file = 'data/%s_%s.csv' % (account['title'], 
-                                                report['name'])
-            log_file = 'data/history/%s_%s_%s-%s.csv' % (account['title'], 
-                                                     report['name'], 
-                                                     start_date,
-                                                     end_date)
-            out_files = [constant_file,log_file]
+            constant_file = "data/%s_%s.csv" % (account["title"], report["name"])
+            log_file = "data/history/%s_%s_%s-%s.csv" % (
+                account["title"],
+                report["name"],
+                start_date,
+                end_date,
+            )
+            out_files = [constant_file, log_file]
 
-            query = report['select']
-            
+            query = report["select"]
+
             # Download and write data to locations
             for path in out_files:
                 GetAdwordsData(adwords_obj, path, query, version=ADWORDS_VSN)
         print
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     Main()

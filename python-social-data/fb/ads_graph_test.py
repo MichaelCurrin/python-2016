@@ -1,4 +1,4 @@
-#!/usr/bin/env python 
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 The purpose of this script is to test and showcase the ability to connect to FB Ads API
@@ -23,6 +23,7 @@ Next steps for possible improvements:
 import urllib2
 import json
 
+
 def GetAdTest(url, FBtoken):
     """
     Read in a finished URL for Facebook Graph, 
@@ -35,11 +36,12 @@ def GetAdTest(url, FBtoken):
     Returns
         data: list or dictionary of API data returned for the query
     """
-    graphURL = url + '&access_token='+ FBtoken
+    graphURL = url + "&access_token=" + FBtoken
     json_string = urllib2.urlopen(graphURL).read()
     parsed_json = json.loads(json_string)
-    data = parsed_json['data'] 
+    data = parsed_json["data"]
     return data
+
 
 ####################################################################################
 # FLAT QUERIES
@@ -51,57 +53,52 @@ def GetAdTest(url, FBtoken):
 # v2.7 is used below, since v2.6 is deprecated for ads and therefore produces an error message.
 
 # URL for account
-dailystats = 'https://graph.facebook.com/v2.7/act_701336110001704/insights?date_preset=last_7_days&time_increment=1&fields=account_id,cpm,cpp,spend,impressions,reach'
+dailystats = "https://graph.facebook.com/v2.7/act_701336110001704/insights?date_preset=last_7_days&time_increment=1&fields=account_id,cpm,cpp,spend,impressions,reach"
 
 # URLS for campaign
-adset_budget = 'https://graph.facebook.com/v2.7/6046949990398/adsets?fields=id,name,lifetime_budget,daily_budget,budget_remaining'
+adset_budget = "https://graph.facebook.com/v2.7/6046949990398/adsets?fields=id,name,lifetime_budget,daily_budget,budget_remaining"
 ad_campaign_metrics = "https://graph.facebook.com/v2.7/6046949990198/insights?time_range[since]=2016-07-01&time_range[until]=2016-07-20&time_increment=1&fields=spend,actions,ctr,clicks,impressions&limit=100"
 
 # URLs for account
-ad_metrics = 'https://graph.facebook.com/v2.7/act_701336110001704/insights?level=ad&fields=ad_name,adset_name,campaign_name,spend,unique_clicks,cost_per_unique_click,cpm,ctr&sort=spend_descending&date_preset=today'
+ad_metrics = "https://graph.facebook.com/v2.7/act_701336110001704/insights?level=ad&fields=ad_name,adset_name,campaign_name,spend,unique_clicks,cost_per_unique_click,cpm,ctr&sort=spend_descending&date_preset=today"
 active_campaigns = "https://graph.facebook.com/v2.7/act_701336110001704/campaigns?fields=id,name,created_time,effective_status&effective_status=['ACTIVE']"
 
 
-urls = [dailystats, 
-        adset_budget, 
-        ad_campaign_metrics, 
-        ad_metrics, 
-        active_campaigns]
+urls = [dailystats, adset_budget, ad_campaign_metrics, ad_metrics, active_campaigns]
 
 
 def Main():
 
     # FB token is generated in business manager, with ads access
-    FBtoken = 'XXXXXXXXXXXXXXXXXXX'
-     
+    FBtoken = "XXXXXXXXXXXXXXXXXXX"
+
     # Print URLs with token
     if True:
-        for url in urls: 
-            graphURL =  url+ '&access_token='+ FBtoken
+        for url in urls:
+            graphURL = url + "&access_token=" + FBtoken
             print graphURL
-            print '***'
+            print "***"
             # you can paste the URL this in your browser
             # recommended: install a pretty JSON viewer in your browser
 
-
     # Get API data and print
-    if True:  
-        
-        for url in urls: 
+    if True:
+
+        for url in urls:
             print url
-            print '#####'    
-            result = GetAdTest(url, FBtoken) 
+            print "#####"
+            result = GetAdTest(url, FBtoken)
             for row in result:
                 print row
             print
-            print '****************************'
+            print "****************************"
             print
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
 
 
-        
 """SAMPLE RESULTS
 
 #1 dailystats
